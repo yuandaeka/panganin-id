@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PANGANIN - Ekosistem Pangan Sosial berbasis AI & Blockchain</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        emerald: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            600: '#059669',
+                            700: '#047857',
+                            800: '#065f46',
+                            900: '#064e3b',
+                        },
+                        amber: {
+                            500: '#f59e0b',
+                            600: '#d97706',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+        /* Smooth transitions */
+        .transition-all-300 {
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased min-h-screen flex flex-col">
+
+    <!-- Top Navigation Bar -->
+    <header class="bg-white border-b border-slate-100 sticky top-0 z-40 w-full transition-all-300">
+        <div class="max-w-md mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <div class="w-10 h-10 bg-emerald-50 rounded-full flex items-center justify-center border border-emerald-100">
+                    <i class="fa-solid fa-leaf text-emerald-600 text-lg"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-extrabold tracking-tight text-emerald-800 flex items-center gap-1">
+                        PANGANIN <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-1.5 py-0.5 rounded-full">AI & BC</span>
+                    </h1>
+                    <p class="text-[10px] text-slate-500 font-medium tracking-wide">PANGAN AMAN & TERINTEGRASI</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-3">
+                <button onclick="toggleGlobalNotification()" class="relative p-2 text-slate-500 hover:text-emerald-600 transition-all-300 rounded-full hover:bg-slate-50">
+                    <i class="fa-solid fa-bell text-lg"></i>
+                    <span class="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 rounded-full ring-2 ring-white"></span>
+                </button>
+                <div class="w-8 h-8 rounded-full bg-emerald-700 text-white font-bold flex items-center justify-center text-xs overflow-hidden shadow-sm">
+                    CA
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN INTERACTIVE HUB (Restricted to Max-Width for Mobile First Experience, Scales on Desktop) -->
+    <main class="flex-1 max-w-md mx-auto w-full bg-white shadow-xl shadow-slate-100 flex flex-col pb-24 min-h-[calc(100vh-65px)] relative overflow-x-hidden">
+        
+        <!-- Notification Banner Toast -->
+        <div id="notification-toast" class="hidden bg-emerald-800 text-white p-3 mx-4 mt-3 rounded-2xl flex items-start gap-2.5 shadow-lg animate-bounce">
+            <i class="fa-solid fa-circle-check text-emerald-300 mt-1"></i>
+            <div class="flex-1">
+                <p class="text-xs font-semibold">Transaksi Blockchain Terverifikasi</p>
+                <p class="text-[10px] text-emerald-100">Sisa limbah organik berhasil disalurkan ke CV EcoEnzym Surakarta.</p>
+            </div>
+            <button onclick="document.getElementById('notification-toast').classList.add('hidden')" class="text-emerald-200 hover:text-white">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <!-- APP CONTENT ROOT SCREENS -->
+        
+        <!-- SCREEN 1: HOME (ACTIVE BY DEFAULT) -->
+        <section id="screen-home" class="p-4 space-y-5">
+            <!-- Greeting & Header -->
+            <div class="space-y-1">
+                <h2 class="text-2xl font-black text-slate-800 tracking-tight">Hello Chef Amir!</h2>
+                <p class="text-sm text-slate-500 font-medium">Ready to cook nutritious, safe, and clean meals today?</p>
+                <div class="flex flex-wrap gap-1.5 pt-1">
+                    <span class="text-[10px] bg-emerald-50 text-emerald-700 font-bold px-2 py-0.5 rounded-full border border-emerald-100"><i class="fa-solid fa-hotel mr-1"></i> Dapur MBG Solo</span>
+                    <span class="text-[10px] bg-amber-50 text-amber-700 font-bold px-2 py-0.5 rounded-full border border-amber-100"><i class="fa-solid fa-certificate mr-1"></i> HACCP Certified</span>
+                </div>
+            </div>
+
+            <!-- Global Search & Direct Query bar -->
+            <div class="relative">
+                <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-slate-400">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </span>
+                <input type="text" placeholder="Cari resep porsi besar, petani lokal, info gizi..." class="w-full bg-slate-50 border border-slate-200/80 rounded-2xl py-3.5 pl-10 pr-4 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:bg-white transition-all-300">
+            </div>
+
+            <!-- PANGANIN Core Features Quick Access Grid -->
+            <div>
+                <h3 class="text-xs font-extrabold text-slate-400 tracking-wider uppercase mb-3">Layanan Utama Panganin</h3>
+                <div class="grid grid-cols-2 gap-3">
+                    <!-- Nav Card 1: AI Portion Planner -->
+                    <button onclick="switchTab('planner')" class="flex flex-col text-left p-3.5 bg-emerald-50/60 hover:bg-emerald-50 border border-emerald-100/50 rounded-2xl transition-all-300 group">
+                        <div class="w-10 h-10 bg-emerald-600 text-white rounded-xl flex items-center justify-center shadow-md shadow-emerald-200 mb-3 group-hover:scale-110 transition-all-300">
+                            <i class="fa-solid fa-calculator text-lg"></i>
+                        </div>
+                        <span class="text-xs font-bold text-slate-800 leading-tight">AI Portion Planner</span>
+                        <span class="text-[10px] text-slate-500 mt-1">Estimasi porsi & resep massal</span>
+                    </button>
+
+                    <!-- Nav Card 2: AI HACCP Scanner -->
+                    <button onclick="switchTab('haccp')" class="flex flex-col text-left p-3.5 bg-red-50/40 hover:bg-red-50 border border-red-100/50 rounded-2xl transition-all-300 group">
+                        <div class="w-10 h-10 bg-red-500 text-white rounded-xl flex items-center justify-center shadow-md shadow-red-200 mb-3 group-hover:scale-110 transition-all-300">
+                            <i class="fa-solid fa-camera-retro text-lg"></i>
+                        </div>
+                        <span class="text-xs font-bold text-slate-800 leading-tight">AI HACCP Scanner</span>
+                        <span class="text-[10px] text-slate-500 mt-1">Audit kebersihan & wadah AI</span>
+                    </button>
+
+                    <!-- Nav Card 3: Blockchain Supply -->
+                    <button onclick="switchTab('blockchain')" class="flex flex-col text-left p-3.5 bg-amber-50/40 hover:bg-amber-50 border border-amber-100/50 rounded-2xl transition-all-300 group">
+                        <div class="w-10 h-10 bg-amber-500 text-white rounded-xl flex items-center justify-center shadow-md shadow-amber-200 mb-3 group-hover:scale-110 transition-all-300">
+                            <i class="fa-solid fa-cubes text-lg"></i>
+                        </div>
+                        <span class="text-xs font-bold text-slate-800 leading-tight">Blockchain Supply</span>
+                        <span class="text-[10px] text-slate-500 mt-1">Harga adil & rute tani lokal</span>
+                    </button>
+
+                    <!-- Nav Card 4: Waste to Value -->
+                    <button onclick="switchTab('waste')" class="flex flex-col text-left p-3.5 bg-blue-50/40 hover:bg-blue-50 border border-blue-100/50 rounded-2xl transition-all-300 group">
+                        <div class="w-10 h-10 bg-blue-500 text-white rounded-xl flex items-center justify-center shadow-md shadow-blue-200 mb-3 group-hover:scale-110 transition-all-300">
+                            <i class="fa-solid fa-recycle text-lg"></i>
+                        </div>
+                        <span class="text-xs font-bold text-slate-800 leading-tight">Waste to Value</span>
+                        <span class="text-[10px] text-slate-500 mt-1">Distribusi pupuk & eco-enzyme</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Today's MBG Menu & Quick Summary Section -->
+            <div class="bg-gradient-to-br from-emerald-800 to-emerald-950 text-white rounded-3xl p-4 shadow-xl shadow-emerald-900/10 space-y-4">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <span class="text-[9px] bg-emerald-700/80 text-emerald-200 font-extrabold px-2 py-0.5 rounded-full uppercase tracking-wider">Jadwal Menu Hari Ini</span>
+                        <h4 class="text-lg font-extrabold mt-1">Nasi Ayam Capcay & Apel</h4>
+                        <p class="text-[10px] text-emerald-300"><i class="fa-solid fa-clock mr-1"></i> Target Distribusi: 11:30 WIB (Makan Siang)</p>
+                    </div>
+                    <div class="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center border border-white/20">
+                        <i class="fa-solid fa-utensils text-emerald-200 text-lg"></i>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-3 gap-2 text-center bg-white/5 p-2.5 rounded-2xl border border-white/10">
+                    <div>
+                        <span class="text-[9px] text-emerald-300 block">Kebutuhan Porsi</span>
+                        <span class="text-sm font-bold block">1,000 porsi</span>
+                    </div>
+                    <div>
+                        <span class="text-[9px] text-emerald-300 block">Status Bahan</span>
+                        <span class="text-sm font-bold text-emerald-300 block"><i class="fa-solid fa-circle-check text-[10px] mr-1"></i>Ready</span>
+                    </div>
+                    <div>
+                        <span class="text-[9px] text-emerald-300 block">Skor HACCP</span>
+                        <span class="text-sm font-bold text-emerald-300 block">98/100</span>
+                    </div>
+                </div>
+
+                <div class="flex gap-2">
+                    <button onclick="switchTab('planner')" class="flex-1 bg-white hover:bg-emerald-50 text-emerald-900 text-xs font-bold py-2.5 px-4 rounded-xl transition-all-300 flex items-center justify-center gap-1.5 shadow-sm">
+                        <i class="fa-solid fa-calculator"></i> Sesuaikan Porsi
+                    </button>
+                    <button onclick="switchTab('haccp')" class="flex-1 bg-emerald-700 hover:bg-emerald-600 text-white border border-emerald-600 text-xs font-bold py-2.5 px-4 rounded-xl transition-all-300 flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-camera"></i> Mulai Scan HACCP
+                    </button>
+                </div>
+            </div>
+
+            <!-- Global Nutrition News & Global Cooking Tips (Edukasi Global) -->
+            <div>
+                <div class="flex items-center justify-between mb-3">
+                    <h3 class="text-xs font-extrabold text-slate-400 tracking-wider uppercase">Edukasi Global & Berita Gizi</h3>
+                    <span class="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">Dunia & Lokal</span>
+                </div>
+                
+                <!-- Horizontal scrolling news carousel -->
+                <div class="flex gap-4 overflow-x-auto pb-2 snap-x scroll-smooth">
+                    <!-- Slide 1 -->
+                    <div class="flex-shrink-0 w-72 bg-white border border-slate-100 rounded-2xl p-3 snap-start shadow-sm space-y-2.5">
+                        <div class="h-28 rounded-xl overflow-hidden relative">
+                            <img src="https://placehold.co/400x200/047857/ffffff?text=Edukasi+Wadah+Food-Grade" alt="Edukasi Wadah" class="w-full h-full object-cover">
+                            <span class="absolute top-2 left-2 bg-red-600 text-[9px] text-white font-extrabold px-1.5 py-0.5 rounded">BAHAYA KRESEK</span>
+                        </div>
+                        <div class="space-y-1">
+                            <h4 class="text-xs font-extrabold text-slate-800 leading-snug">Bahaya Zat Kimia Wadah Non-Foodgrade</h4>
+                            <p class="text-[10px] text-slate-500 line-clamp-2">Membungkus makanan panas (seperti seblak/warmindo) dengan plastik kresek hitam atau styrofoam memicu migrasi zat karsinogenik.</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Slide 2 -->
+                    <div class="flex-shrink-0 w-72 bg-white border border-slate-100 rounded-2xl p-3 snap-start shadow-sm space-y-2.5">
+                        <div class="h-28 rounded-xl overflow-hidden relative">
+                            <img src="https://placehold.co/400x200/d97706/ffffff?text=Tips+Masak+Porsi+Besar" alt="Tips Masak" class="w-full h-full object-cover">
+                            <span class="absolute top-2 left-2 bg-amber-600 text-[9px] text-white font-extrabold px-1.5 py-0.5 rounded">TIPS MASAK MBG</span>
+                        </div>
+                        <div class="space-y-1">
+                            <h4 class="text-xs font-extrabold text-slate-800 leading-snug">Cara Agar Porsi Besar Tidak Cepat Dingin</h4>
+                            <p class="text-[10px] text-slate-500 line-clamp-2">Gibran menyoroti makanan dingin akibat dimasak terlalu pagi. Simak tips pembagian waktu produksi dan penggunaan alat isolasi suhu.</p>
+                        </div>
+                    </div>
+
+                    <!-- Slide 3 -->
+                    <div class="flex-shrink-0 w-72 bg-white border border-slate-100 rounded-2xl p-3 snap-start shadow-sm space-y-2.5">
+                        <div class="h-28 rounded-xl overflow-hidden relative">
+                            <img src="https://placehold.co/400x200/0369a1/ffffff?text=Sirkular+Ekonomi+Sampah" alt="Sirkular Sampah" class="w-full h-full object-cover">
+                            <span class="absolute top-2 left-2 bg-blue-600 text-[9px] text-white font-extrabold px-1.5 py-0.5 rounded">ECO ENZYME</span>
+                        </div>
+                        <div class="space-y-1">
+                            <h4 class="text-xs font-extrabold text-slate-800 leading-snug">Mengolah Sisa Dapur Menjadi Nilai Rupiah</h4>
+                            <p class="text-[10px] text-slate-500 line-clamp-2">Menghubungkan sisa sayur dan buah dapur MBG langsung ke pabrik kompos mikro lokal via pelacakan blockchain terpercaya.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- SCREEN 2: AI PORTION PLANNER -->
+        <section id="screen-planner" class="hidden p-4 space-y-5">
+            <!-- Header -->
+            <div class="flex items-center gap-2">
+                <button onclick="switchTab('home')" class="p-2 bg-slate-50 hover:bg-emerald-50 text-slate-700 hover:text-emerald-700 rounded-full transition-all-300">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </button>
+                <div>
+                    <h2 class="text-xl font-extrabold text-slate-800 leading-tight">AI Portion & Recipe Planner</h2>
+                    <p class="text-xs text-slate-500">Hitung presisi bahan, nilai gizi, & minimalisasi food-waste</p>
+                </div>
+            </div>
+
+            <!-- Input Card -->
+            <div class="bg-white border border-slate-100 rounded-3xl p-4 shadow-sm space-y-4">
+                <div class="space-y-2">
+                    <label class="text-xs font-extrabold text-slate-500 uppercase tracking-wider block">1. Pilih Hidangan Utama</label>
+                    <select id="planner-dish-select" onchange="toggleCustomDishInput(); calculatePortion();" class="w-full bg-slate-50 border border-slate-200 rounded-2xl p-3.5 text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-600 transition-all-300">
+                        <option value="capcay">Nasi Ayam Capcay & Apel (Standar Gizi MBG)</option>
+                        <option value="taco">Chicken Salad Bowl & Jeruk (Diet Sehat / Pekerja)</option>
+                        <option value="seblak">Soto Ayam Padat Nutrisi & Pisang (Massal / Hajatan)</option>
+                        <option value="custom">✍️ Tulis Hidangan Sendiri (Input Manual)...</option>
+                    </select>
+
+                    <!-- Manual Input Field (Shown conditionally based on selection) -->
+                    <div id="custom-dish-input-container" class="hidden mt-3 space-y-1.5">
+                        <label class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider block">Tulis Hidangan Pilihan Anda</label>
+                        <input type="text" id="planner-custom-dish" placeholder="Ketik resep kustom (misal: Nasi Rendang Daging & Melon)..." oninput="calculatePortion()" class="w-full bg-slate-50 border border-slate-200 rounded-2xl p-3.5 text-xs font-bold focus:outline-none focus:ring-2 focus:ring-emerald-600 transition-all-300">
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <div class="flex justify-between items-center">
+                        <label class="text-xs font-extrabold text-slate-500 uppercase tracking-wider block">2. Tentukan Jumlah Porsi</label>
+                        <span id="portion-value-display" class="text-sm font-black text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100">500 Porsi</span>
+                    </div>
+                    <input type="range" id="portion-range" min="10" max="2000" value="500" step="10" oninput="updatePortionSlider(this.value)" class="w-full h-2 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-emerald-600">
+                    <div class="flex justify-between text-[10px] text-slate-400 font-bold">
+                        <span>10 Porsi</span>
+                        <span>1,000 Porsi</span>
+                        <span>2,000 Porsi</span>
+                    </div>
+                </div>
+
+                <!-- Budget Optimizer Switch -->
+                <div class="flex items-center justify-between p-3 bg-emerald-50/50 rounded-2xl border border-emerald-100/30">
+                    <div class="flex gap-2 items-center">
+                        <i class="fa-solid fa-coins text-emerald-600 text-sm"></i>
+                        <div>
+                            <p class="text-xs font-bold text-slate-800">Optimasi Anggaran AI</p>
+                            <p class="text-[9px] text-slate-500">Rekomendasikan bahan pangan lokal termurah</p>
+                        </div>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="budget-toggle" checked onchange="calculatePortion()" class="sr-only peer">
+                        <div class="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-600"></div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Interactive Outputs Card -->
+            <div class="space-y-3">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-xs font-extrabold text-slate-400 tracking-wider uppercase">Estimasi Kebutuhan Bahan Baku</h3>
+                    <!-- AI Generated indicator added dynamically -->
+                    <div class="flex items-center gap-1.5" id="ai-badge-status">
+                        <span class="bg-emerald-100 text-emerald-800 text-[9px] px-2 py-0.5 rounded-full font-bold flex items-center gap-1">
+                            <i class="fa-solid fa-wand-magic-sparkles text-emerald-600"></i> AI Generated
+                        </span>
+                        <span class="text-[10px] text-emerald-700 font-bold flex items-center gap-1"><i class="fa-solid fa-shield-halved"></i> Gizi Seimbang</span>
+                    </div>
+                </div>
+
+                <!-- Dynamic Ingredients Card -->
+                <div class="bg-white border border-slate-100 rounded-3xl p-4 shadow-sm space-y-3">
+                    <div id="ingredients-container" class="space-y-2.5">
+                        <!-- Filled by JS -->
+                    </div>
+
+                    <div class="border-t border-slate-100 pt-3 flex justify-between items-center">
+                        <div>
+                            <span class="text-[9px] text-slate-400 font-bold block">ESTIMASI TOTAL BIAYA</span>
+                            <span id="total-price-display" class="text-base font-extrabold text-emerald-800">Rp 7.500.000</span>
+                        </div>
+                        <button onclick="matchFarmersDirectly()" class="bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition-all-300 flex items-center gap-1.5 shadow-sm">
+                            <i class="fa-solid fa-cart-shopping"></i> Hubungkan Petani Lokal
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- SCREEN 3: AI HACCP SCANNER -->
+        <section id="screen-haccp" class="hidden p-4 space-y-5">
+            <!-- Header -->
+            <div class="flex items-center gap-2">
+                <button onclick="switchTab('home')" class="p-2 bg-slate-50 hover:bg-emerald-50 text-slate-700 hover:text-emerald-700 rounded-full transition-all-300">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </button>
+                <div>
+                    <h2 class="text-xl font-extrabold text-slate-800 leading-tight">AI HACCP Photo Scanner</h2>
+                    <p class="text-xs text-slate-500">Uji higienis dapur, kesiapan saji & bahaya wadah</p>
+                </div>
+            </div>
+
+            <!-- Simulated Camera Viewfinder -->
+            <div class="bg-slate-900 rounded-3xl overflow-hidden shadow-xl aspect-video relative flex flex-col items-center justify-center group">
+                <!-- Camera Backdrop Simulation -->
+                <img id="haccp-camera-img" src="https://placehold.co/600x350/111827/ffffff?text=Pilih+Kondisi+Analisis+Di+Bawah" alt="Camera View" class="w-full h-full object-cover">
+                
+                <!-- Bounding Box Overlays (Controlled by JS) -->
+                <div id="haccp-bounding-box" class="hidden absolute border-2 border-red-500 rounded-xl p-2 animate-pulse" style="top: 25%; left: 30%; width: 40%; height: 50%;">
+                    <span id="haccp-bounding-tag" class="absolute -top-6 left-0 bg-red-600 text-[10px] text-white font-black px-2 py-0.5 rounded shadow">BAHAYA: STYROFOAM DETECTED</span>
+                </div>
+
+                <!-- Green Bounding Box Overlay -->
+                <div id="haccp-bounding-box-safe" class="hidden absolute border-2 border-emerald-500 rounded-xl p-2 animate-pulse" style="top: 20%; left: 25%; width: 50%; height: 60%;">
+                    <span id="haccp-bounding-tag-safe" class="absolute -top-6 left-0 bg-emerald-600 text-[10px] text-white font-black px-2 py-0.5 rounded shadow">AMAN: FOOD GRADE STAINLESS</span>
+                </div>
+
+                <!-- Camera Overlay UI elements -->
+                <div class="absolute top-3 left-3 flex gap-1.5">
+                    <span class="text-[9px] bg-black/60 backdrop-blur-sm text-white font-bold px-2 py-1 rounded-full flex items-center gap-1"><span class="w-1.5 h-1.5 bg-red-500 rounded-full animate-ping"></span> LIVE CAMERA</span>
+                </div>
+                <div class="absolute bottom-3 right-3">
+                    <span class="text-[9px] bg-black/60 backdrop-blur-sm text-white font-mono px-2 py-1 rounded">ISO 400</span>
+                </div>
+            </div>
+
+            <!-- Choose presets to simulate scanning -->
+            <div class="space-y-2">
+                <label class="text-xs font-extrabold text-slate-400 uppercase tracking-wider block">Pilih Simulasi Objek Scan:</label>
+                <div class="grid grid-cols-2 gap-2">
+                    <button onclick="simulateHACCP('styrofoam')" class="bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-800 text-xs font-bold py-2.5 px-3 rounded-2xl transition-all-300 text-left flex items-center gap-2">
+                        <span class="w-3 h-3 bg-red-500 rounded-full"></span> Kuah Styrofoam (Panas)
+                    </button>
+                    <button onclick="simulateHACCP('plastic')" class="bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-800 text-xs font-bold py-2.5 px-3 rounded-2xl transition-all-300 text-left flex items-center gap-2">
+                        <span class="w-3 h-3 bg-red-500 rounded-full"></span> Kresek Panas Warmindo
+                    </button>
+                    <button onclick="simulateHACCP('stainless')" class="bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-800 text-xs font-bold py-2.5 px-3 rounded-2xl transition-all-300 text-left flex items-center gap-2">
+                        <span class="w-3 h-3 bg-emerald-500 rounded-full"></span> Wadah Stainless Steel
+                    </button>
+                    <button onclick="simulateHACCP('dirty')" class="bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-800 text-xs font-bold py-2.5 px-3 rounded-2xl transition-all-300 text-left flex items-center gap-2">
+                        <span class="w-3 h-3 bg-amber-500 rounded-full"></span> Meja Dapur Kotor
+                    </button>
+                </div>
+            </div>
+
+            <!-- AI HACCP Checklist & Analysis Outcome -->
+            <div class="bg-white border border-slate-100 rounded-3xl p-4 shadow-sm space-y-4">
+                <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                    <span class="text-xs font-extrabold text-slate-400 uppercase tracking-wider">Hasil Audit AI HACCP</span>
+                    <span id="haccp-score" class="text-sm font-black text-slate-400 bg-slate-100 px-2.5 py-0.5 rounded-full">--/100</span>
+                </div>
+
+                <!-- Default Placeholder state -->
+                <div id="haccp-placeholder-text" class="text-center py-6 text-slate-400 space-y-2">
+                    <i class="fa-solid fa-network-wired text-3xl opacity-40"></i>
+                    <p class="text-xs font-semibold">Silakan pilih salah satu objek simulasi di atas untuk memulai analisis AI.</p>
+                </div>
+
+                <!-- Checklist Result details (Filled dynamically) -->
+                <div id="haccp-result-details" class="hidden space-y-3.5">
+                    <div class="flex items-start gap-3">
+                        <span id="haccp-indicator-icon" class="w-6 h-6 rounded-full flex items-center justify-center text-xs mt-0.5"></span>
+                        <div class="flex-1">
+                            <h4 id="haccp-verdict-title" class="text-sm font-extrabold text-slate-800">Analisis Kritis Selesai</h4>
+                            <p id="haccp-verdict-desc" class="text-xs text-slate-500 mt-1">Status dan rekomendasi tindakan penanganan gizi aman.</p>
+                        </div>
+                    </div>
+
+                    <!-- Detail Checklist Points -->
+                    <div class="space-y-2 pt-2 border-t border-slate-100">
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="text-slate-500 font-semibold">Kategori Kontrol</span>
+                            <span id="haccp-category-span" class="font-bold">--</span>
+                        </div>
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="text-slate-500 font-semibold">Suhu Aman (Serving Temp)</span>
+                            <span id="haccp-temp-span" class="font-bold">--</span>
+                        </div>
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="text-slate-500 font-semibold">Rekomendasi Wadah</span>
+                            <span id="haccp-packaging-span" class="font-bold">--</span>
+                        </div>
+                    </div>
+
+                    <!-- AI Actionable advice block -->
+                    <div id="haccp-advice-box" class="p-3 rounded-2xl text-xs space-y-1">
+                        <!-- Filled by JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- SCREEN 4: BLOCKCHAIN SUPPLY CHAIN MAP -->
+        <section id="screen-blockchain" class="hidden p-4 space-y-5">
+            <!-- Header -->
+            <div class="flex items-center gap-2">
+                <button onclick="switchTab('home')" class="p-2 bg-slate-50 hover:bg-emerald-50 text-slate-700 hover:text-emerald-700 rounded-full transition-all-300">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </button>
+                <div>
+                    <h2 class="text-xl font-extrabold text-slate-800 leading-tight">Blockchain Supply Matchmaker</h2>
+                    <p class="text-xs text-slate-500">Cegah korupsi, potong tengkulak, bantu petani lokal</p>
+                </div>
+            </div>
+
+            <!-- Blockchain verified farmer matching map simulation -->
+            <div class="bg-emerald-50 rounded-3xl p-4 border border-emerald-100/50 space-y-3.5">
+                <div class="flex justify-between items-center">
+                    <span class="text-[10px] bg-emerald-600 text-white font-extrabold px-2.5 py-0.5 rounded-full"><i class="fa-solid fa-link mr-1"></i> BLOCKCHAIN VERIFIED</span>
+                    <span class="text-xs font-bold text-emerald-800">4 Petani Lokal Terdeteksi</span>
+                </div>
+
+                <!-- Simulation map representation -->
+                <div class="bg-white rounded-2xl border border-emerald-100 p-3 flex items-center justify-between shadow-sm relative overflow-hidden">
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 bg-emerald-100 text-emerald-700 rounded-xl flex items-center justify-center font-bold text-lg shadow-sm">
+                            <i class="fa-solid fa-tractor"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-xs font-extrabold text-slate-800">Kelompok Tani Rejo Boyolali</h4>
+                            <p class="text-[10px] text-slate-500">Jarak: 18 Km • 200Kg Bawang & Kubis Ready</p>
+                            <span class="text-[9px] bg-slate-100 text-slate-600 font-bold px-1.5 py-0.5 rounded mt-1 inline-block">Ledger ID: #BC-83921</span>
+                        </div>
+                    </div>
+                    <span class="text-xs font-extrabold text-emerald-700">Rp 18.000/kg</span>
+                </div>
+
+                <div class="bg-white rounded-2xl border border-emerald-100 p-3 flex items-center justify-between shadow-sm relative overflow-hidden">
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 bg-emerald-100 text-emerald-700 rounded-xl flex items-center justify-center font-bold text-lg shadow-sm">
+                            <i class="fa-solid fa-cow"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-xs font-extrabold text-slate-800">Peternak Mandiri Karanganyar</h4>
+                            <p class="text-[10px] text-slate-500">Jarak: 22 Km • 500Kg Karkas Ayam Fresh</p>
+                            <span class="text-[9px] bg-slate-100 text-slate-600 font-bold px-1.5 py-0.5 rounded mt-1 inline-block">Ledger ID: #BC-22839</span>
+                        </div>
+                    </div>
+                    <span class="text-xs font-extrabold text-emerald-700">Rp 32.000/kg</span>
+                </div>
+            </div>
+
+            <!-- Ledger Block Transaction History -->
+            <div class="space-y-3">
+                <h3 class="text-xs font-extrabold text-slate-400 tracking-wider uppercase">Histori Ledger Blockchain & Transparansi</h3>
+                <div class="space-y-2 max-h-48 overflow-y-auto pr-1">
+                    <div class="bg-white border border-slate-100 rounded-2xl p-3 shadow-sm flex justify-between items-center text-xs">
+                        <div>
+                            <p class="font-extrabold text-slate-800">Pengadaan Bahan Menu MBG 1000 Porsi</p>
+                            <p class="text-[9px] text-slate-400 font-mono">TxID: 0x47a1...8b9c | 25-06-2026</p>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-emerald-700 font-bold block">Rp 7.500.000</span>
+                            <span class="text-[8px] bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded-full font-extrabold">VERIFIED</span>
+                        </div>
+                    </div>
+                    <div class="bg-white border border-slate-100 rounded-2xl p-3 shadow-sm flex justify-between items-center text-xs">
+                        <div>
+                            <p class="font-extrabold text-slate-800">Pengiriman Sampah Organik ke Mitra Kompos</p>
+                            <p class="text-[9px] text-slate-400 font-mono">TxID: 0x932b...99ee | 24-06-2026</p>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-emerald-700 font-bold block">150 Kg</span>
+                            <span class="text-[8px] bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded-full font-extrabold">VERIFIED</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- SCREEN 5: WASTE TO VALUE (CIRCULAR ECONOMY) -->
+        <section id="screen-waste" class="hidden p-4 space-y-5">
+            <!-- Header -->
+            <div class="flex items-center gap-2">
+                <button onclick="switchTab('home')" class="p-2 bg-slate-50 hover:bg-emerald-50 text-slate-700 hover:text-emerald-700 rounded-full transition-all-300">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </button>
+                <div>
+                    <h2 class="text-xl font-extrabold text-slate-800 leading-tight">Circular Economy Waste Tracker</h2>
+                    <p class="text-xs text-slate-500">Salurkan limbah pangan, raih bonus insentif hijau</p>
+                </div>
+            </div>
+
+            <!-- Input to record waste -->
+            <div class="bg-white border border-slate-100 rounded-3xl p-4 shadow-sm space-y-4">
+                <h3 class="text-xs font-extrabold text-slate-500 uppercase tracking-wider">Catat Sisa Limbah Dapur</h3>
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="space-y-1.5">
+                        <label class="text-[10px] text-slate-500 font-extrabold">Berat Limbah (Kg)</label>
+                        <input type="number" id="waste-weight-input" placeholder="Misal: 25" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs font-bold focus:outline-none focus:ring-2 focus:ring-emerald-600">
+                    </div>
+                    <div class="space-y-1.5">
+                        <label class="text-[10px] text-slate-500 font-extrabold">Jenis Limbah</label>
+                        <select id="waste-type-select" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs font-bold focus:outline-none focus:ring-2 focus:ring-emerald-600">
+                            <option value="organik">Sayuran & Buah Sisa</option>
+                            <option value="sisa">Makanan Matang Sisa</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="space-y-1.5">
+                    <label class="text-[10px] text-slate-500 font-extrabold block">Mitra Penerima Pengolahan</label>
+                    <select id="waste-partner-select" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs font-bold focus:outline-none focus:ring-2 focus:ring-emerald-600">
+                        <option value="eco">CV EcoEnzym Mandiri (Pupuk Organik)</option>
+                        <option value="kompos">Rumah Kompos Komunitas Solo</option>
+                    </select>
+                </div>
+
+                <button onclick="submitWasteToBlockchain()" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold py-3.5 rounded-2xl transition-all-300 shadow-md shadow-emerald-700/10 flex items-center justify-center gap-1.5">
+                    <i class="fa-solid fa-share-nodes"></i> Kirim & Daftarkan di Blockchain
+                </button>
+            </div>
+
+            <!-- Sirkular diagram visualization mock -->
+            <div class="bg-blue-50/50 rounded-3xl p-4 border border-blue-100/50 space-y-3">
+                <h4 class="text-xs font-extrabold text-blue-900 flex items-center gap-1"><i class="fa-solid fa-circle-nodes"></i> Dampak Ekonomi Sirkular Anda</h4>
+                <div class="grid grid-cols-2 gap-3 text-center">
+                    <div class="bg-white p-3 rounded-2xl border border-blue-100">
+                        <span class="text-[9px] text-slate-400 font-bold block">TOTAL DISALURKAN</span>
+                        <span id="circular-total-weight" class="text-sm font-black text-blue-700">325 Kg</span>
+                    </div>
+                    <div class="bg-white p-3 rounded-2xl border border-blue-100">
+                        <span class="text-[9px] text-slate-400 font-bold block">ECO-REWARDS POIN</span>
+                        <span id="circular-total-points" class="text-sm font-black text-amber-600">4,500 Poin</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- BOTTOM STICKY NAVIGATION BAR (USER-FRIENDLY & ACCESSIBLE) -->
+        <nav class="absolute bottom-0 inset-x-0 bg-slate-900 text-white border-t border-slate-800 px-6 py-3 rounded-t-3xl flex justify-between items-center z-40 shadow-2xl">
+            <!-- Nav Item: Home -->
+            <button onclick="switchTab('home')" id="nav-btn-home" class="flex flex-col items-center gap-1 text-emerald-500 transition-all-300">
+                <i class="fa-solid fa-house text-lg"></i>
+                <span class="text-[9px] font-bold">Beranda</span>
+            </button>
+
+            <!-- Nav Item: Portion Planner -->
+            <button onclick="switchTab('planner')" id="nav-btn-planner" class="flex flex-col items-center gap-1 text-slate-400 hover:text-white transition-all-300">
+                <i class="fa-solid fa-calculator text-lg"></i>
+                <span class="text-[9px] font-bold">Portion AI</span>
+            </button>
+
+            <!-- Centered Floating AI Assistant Trigger -->
+            <button onclick="toggleAIChatbot()" class="w-14 h-14 bg-emerald-600 hover:bg-emerald-500 text-white rounded-full flex items-center justify-center -mt-8 shadow-lg shadow-emerald-700/30 transition-all-300 hover:scale-105 active:scale-95 border-4 border-slate-900 relative">
+                <i class="fa-solid fa-robot text-xl"></i>
+                <span class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full ring-2 ring-emerald-600 animate-pulse"></span>
+            </button>
+
+            <!-- Nav Item: HACCP AI -->
+            <button onclick="switchTab('haccp')" id="nav-btn-haccp" class="flex flex-col items-center gap-1 text-slate-400 hover:text-white transition-all-300">
+                <i class="fa-solid fa-camera-retro text-lg"></i>
+                <span class="text-[9px] font-bold">HACCP Scan</span>
+            </button>
+
+            <!-- Nav Item: Ledger BC -->
+            <button onclick="switchTab('blockchain')" id="nav-btn-blockchain" class="flex flex-col items-center gap-1 text-slate-400 hover:text-white transition-all-300">
+                <i class="fa-solid fa-link text-lg"></i>
+                <span class="text-[9px] font-bold">Ledger BC</span>
+            </button>
+        </nav>
+
+        <!-- CHATBOT WIDGET SLIDE-UP PANEL -->
+        <div id="ai-chatbot-panel" class="hidden absolute inset-x-0 bottom-0 top-1/4 bg-white rounded-t-3xl shadow-2xl z-50 flex flex-col border-t border-slate-200 transition-all-300">
+            <!-- Header panel -->
+            <div class="bg-gradient-to-r from-emerald-800 to-emerald-950 text-white px-4 py-3.5 rounded-t-3xl flex items-center justify-between">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 bg-emerald-700 rounded-full flex items-center justify-center border border-emerald-600 shadow-sm">
+                        <i class="fa-solid fa-robot"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xs font-extrabold">Panganin AI Assistant</h3>
+                        <p class="text-[9px] text-emerald-300 flex items-center gap-1"><span class="w-1.5 h-1.5 bg-green-400 rounded-full animate-ping"></span> Ahli Gizi & HACCP Pintar</p>
+                    </div>
+                </div>
+                <button onclick="toggleAIChatbot()" class="p-1.5 text-emerald-200 hover:text-white transition-all-300">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <!-- Messages Stream container -->
+            <div id="chat-messages-container" class="flex-1 p-4 overflow-y-auto space-y-3.5 bg-slate-50">
+                <!-- Message 1 (AI Welcome) -->
+                <div class="flex items-start gap-2 max-w-[85%]">
+                    <div class="w-6.5 h-6.5 bg-emerald-100 text-emerald-800 rounded-full flex items-center justify-center text-[10px] p-1.5">AI</div>
+                    <div class="bg-white border border-slate-100 p-3 rounded-2xl rounded-tl-none shadow-sm">
+                        <p class="text-xs text-slate-800 leading-relaxed">Halo Chef! Saya **Panganin AI**. Saya siap membantu menjawab pertanyaan seputar standardisasi gizi, porsi makan besar, bahaya wadah (plastik/styrofoam), regulasi suhu, dan pengolahan limbah. Apa yang ingin Anda tanyakan hari ini?</p>
+                    </div>
+                </div>
+
+                <!-- Chat helper suggestions buttons -->
+                <div class="flex flex-wrap gap-1.5 pt-1">
+                    <button onclick="sendPredefinedQuery('Bagaimana agar kuah sup porsi besar tidak cepat dingin?')" class="text-[10px] bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-semibold px-2.5 py-1.5 rounded-full border border-emerald-200 transition-all-300">
+                        🍲 Sup massal tetap hangat?
+                    </button>
+                    <button onclick="sendPredefinedQuery('Apa bahaya membungkus makanan panas dengan plastik kresek?')" class="text-[10px] bg-red-50 hover:bg-red-100 text-red-800 font-semibold px-2.5 py-1.5 rounded-full border border-red-200 transition-all-300">
+                        ⚠️ Bahaya bungkus kresek?
+                    </button>
+                    <button onclick="sendPredefinedQuery('Bagaimana sistem blockchain membantu petani lokal?')" class="text-[10px] bg-amber-50 hover:bg-amber-100 text-amber-800 font-semibold px-2.5 py-1.5 rounded-full border border-amber-200 transition-all-300">
+                        🔗 Peran Blockchain tani?
+                    </button>
+                </div>
+            </div>
+
+            <!-- Chat input controls -->
+            <div class="p-3 bg-white border-t border-slate-100 flex gap-2">
+                <input type="text" id="chat-user-input" placeholder="Ketik pertanyaan gizi/HACCP..." class="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-600 transition-all-300" onkeypress="handleChatEnter(event)">
+                <button onclick="sendMessageFromInput()" class="bg-emerald-600 hover:bg-emerald-700 text-white p-3 rounded-xl shadow-md shadow-emerald-600/10 transition-all-300">
+                    <i class="fa-solid fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- FOOTER / CREDIT OUTSIDE SIMULATOR VIEWPORT -->
+    <footer class="bg-slate-900 border-t border-slate-800 text-slate-500 py-6 text-center text-xs mt-auto">
+        <p class="font-bold text-slate-400">PANGANIN © 2026</p>
+        <p class="text-[10px] mt-1 max-w-md mx-auto px-4">Inovasi Ekosistem berbasis AI dan Blockchain untuk Ketahanan Pangan Sosial & Circular Economy.</p>
+    </footer>
+
+    <!-- JAVASCRIPT SYSTEM INTERACTIVITY -->
+    <script>
+        // Tab / Screen switching engine
+        function switchTab(targetTab) {
+            // Hide all screen sections
+            document.getElementById('screen-home').classList.add('hidden');
+            document.getElementById('screen-planner').classList.add('hidden');
+            document.getElementById('screen-haccp').classList.add('hidden');
+            document.getElementById('screen-blockchain').classList.add('hidden');
+            document.getElementById('screen-waste').classList.add('hidden');
+
+            // Show target screen
+            document.getElementById('screen-' + targetTab).classList.remove('hidden');
+
+            // Reset navigation button visual states
+            const navButtons = ['home', 'planner', 'haccp', 'blockchain'];
+            navButtons.forEach(btn => {
+                const element = document.getElementById('nav-btn-' + btn);
+                if (element) {
+                    element.classList.remove('text-emerald-500');
+                    element.classList.add('text-slate-400');
+                }
+            });
+
+            // Activate current nav button highlight
+            const targetBtn = document.getElementById('nav-btn-' + targetTab);
+            if (targetBtn) {
+                targetBtn.classList.remove('text-slate-400');
+                targetBtn.classList.add('text-emerald-500');
+            }
+
+            // Close chatbot when switching screens
+            document.getElementById('ai-chatbot-panel').classList.add('hidden');
+
+            // Run special screen setup
+            if (targetTab === 'planner') {
+                calculatePortion();
+            }
+        }
+
+        // Floating AI chatbot panel toggle state manager
+        function toggleAIChatbot() {
+            const chatbotPanel = document.getElementById('ai-chatbot-panel');
+            chatbotPanel.classList.toggle('hidden');
+            
+            // Scroll to bottom of chat
+            const chatContainer = document.getElementById('chat-messages-container');
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        // Global Alert Notifications
+        function toggleGlobalNotification() {
+            const toast = document.getElementById('notification-toast');
+            toast.classList.remove('hidden');
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 6000);
+        }
+
+        function toggleCustomDishInput() {
+            const select = document.getElementById('planner-dish-select');
+            const customContainer = document.getElementById('custom-dish-input-container');
+            if (select.value === 'custom') {
+                customContainer.classList.remove('hidden');
+                const customInput = document.getElementById('planner-custom-dish');
+                if (!customInput.value.trim()) {
+                    customInput.value = "Nasi Rendang Sapi & Melon";
+                }
+            } else {
+                customContainer.classList.add('hidden');
+            }
+        }
+
+        // Recipe Portion Planner engine
+        function updatePortionSlider(value) {
+            document.getElementById('portion-value-display').innerText = parseInt(value).toLocaleString() + " Porsi";
+            calculatePortion();
+        }
+
+        function calculatePortion() {
+            const dish = document.getElementById('planner-dish-select').value;
+            const customDishText = document.getElementById('planner-custom-dish').value.trim() || "Hidangan Kustom";
+            const portionCount = parseInt(document.getElementById('portion-range').value);
+            const budgetOptimizer = document.getElementById('budget-toggle').checked;
+            
+            const ingredientsContainer = document.getElementById('ingredients-container');
+            const aiBadge = document.getElementById('ai-badge-status');
+            let ingredients = [];
+            let pricePerPortion = 15000; // Base rupiah per portion
+
+            if (budgetOptimizer) {
+                pricePerPortion = 12000; // Discounted due to AI farmer matchmaking and direct buy
+            }
+
+            // Show temporary animated generating state for visual effect
+            if (aiBadge) {
+                aiBadge.innerHTML = `
+                    <span class="bg-amber-100 text-amber-800 text-[9px] px-2 py-0.5 rounded-full font-bold flex items-center gap-1 animate-pulse">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i> AI Generating...
+                    </span>
+                    <span class="text-[10px] text-emerald-700 font-bold flex items-center gap-1"><i class="fa-solid fa-shield-halved"></i> Gizi Seimbang</span>
+                `;
+            }
+
+            if (dish === 'capcay') {
+                ingredients = [
+                    { name: 'Beras Lokal (Boyolali)', weight: 0.1 * portionCount, unit: 'Kg', icon: 'wheat-awn' },
+                    { name: 'Daging Ayam Karanganyar', weight: 0.08 * portionCount, unit: 'Kg', icon: 'egg' },
+                    { name: 'Bawang Merah & Putih Petani', weight: 0.015 * portionCount, unit: 'Kg', icon: 'pepper-hot' },
+                    { name: 'Wortel & Sayuran Hijau Segar', weight: 0.12 * portionCount, unit: 'Kg', icon: 'seedling' },
+                    { name: 'Apel Malang Grade B (Surplus)', weight: 1 * portionCount, unit: 'Pcs', icon: 'apple-whole' },
+                ];
+            } else if (dish === 'taco') {
+                ingredients = [
+                    { name: 'Daging Karkas Ayam Potong', weight: 0.1 * portionCount, unit: 'Kg', icon: 'egg' },
+                    { name: 'Selada & Kubis Organik', weight: 0.15 * portionCount, unit: 'Kg', icon: 'seedling' },
+                    { name: 'Minyak Kelapa Sawit Curah', weight: 0.02 * portionCount, unit: 'Liter', icon: 'droplet' },
+                    { name: 'Jeruk Manis Karanganyar', weight: 1 * portionCount, unit: 'Pcs', icon: 'lemon' },
+                ];
+            } else if (dish === 'seblak') { // Soto
+                ingredients = [
+                    { name: 'Bihun Jagung Sehat', weight: 0.08 * portionCount, unit: 'Kg', icon: 'wheat-awn' },
+                    { name: 'Suwiran Daging Ayam', weight: 0.06 * portionCount, unit: 'Kg', icon: 'egg' },
+                    { name: 'Bawang Putih, Kunyit & Rempah', weight: 0.02 * portionCount, unit: 'Kg', icon: 'leaf' },
+                    { name: 'Pisang Mas Solo Raya', weight: 1 * portionCount, unit: 'Pcs', icon: 'apple-whole' },
+                ];
+            } else if (dish === 'custom') {
+                // Dynamically build recipe based on user input keywords
+                const lowerCustom = customDishText.toLowerCase();
+                let mainProtein = "Protein Utama Pilihan AI";
+                let proteinIcon = "egg";
+                let mainCarb = "Karbohidrat Pokok Pilihan AI";
+                let carbIcon = "wheat-awn";
+                let mainVeg = "Sayuran & Bumbu Pelengkap AI";
+                let vegIcon = "seedling";
+                let mainFruit = "Buah Gizi Pendamping AI";
+                let fruitIcon = "apple-whole";
+
+                if (lowerCustom.includes("rendang") || lowerCustom.includes("sapi") || lowerCustom.includes("daging")) {
+                    mainProtein = "Daging Sapi Lokal (Boyolali)";
+                    proteinIcon = "cow";
+                    mainCarb = "Beras Organik Sragen";
+                    mainVeg = "Rempah Rendang & Santan Kelapa";
+                    vegIcon = "pepper-hot";
+                } else if (lowerCustom.includes("ikan") || lowerCustom.includes("lele") || lowerCustom.includes("nila")) {
+                    mainProtein = "Ikan Segar Budidaya Mina Tani";
+                    proteinIcon = "fish";
+                    mainCarb = "Nasi Putih Premium";
+                } else if (lowerCustom.includes("goreng") || lowerCustom.includes("mie") || lowerCustom.includes("nasi")) {
+                    mainCarb = "Beras/Mie Telur Pilihan";
+                    mainProtein = "Telur & Suwiran Ayam";
+                }
+
+                if (lowerCustom.includes("pisang")) {
+                    mainFruit = "Pisang Mas Solo Raya";
+                } else if (lowerCustom.includes("semangka")) {
+                    mainFruit = "Semangka Merah Segar";
+                } else if (lowerCustom.includes("jeruk")) {
+                    mainFruit = "Jeruk Manis Karanganyar";
+                    fruitIcon = "lemon";
+                } else if (lowerCustom.includes("melon")) {
+                    mainFruit = "Melon Madu Grade A";
+                }
+
+                ingredients = [
+                    { name: mainCarb, weight: 0.09 * portionCount, unit: 'Kg', icon: carbIcon },
+                    { name: mainProtein, weight: 0.07 * portionCount, unit: 'Kg', icon: proteinIcon },
+                    { name: mainVeg, weight: 0.11 * portionCount, unit: 'Kg', icon: vegIcon },
+                    { name: mainFruit, weight: 1 * portionCount, unit: 'Pcs', icon: fruitIcon }
+                ];
+            }
+
+            // Print ingredients output cards dynamically after a slight delay to simulate calculation
+            setTimeout(() => {
+                ingredientsContainer.innerHTML = '';
+                ingredients.forEach(ing => {
+                    const card = document.createElement('div');
+                    card.className = "flex items-center justify-between p-2.5 bg-slate-50 border border-slate-100 rounded-xl text-xs";
+                    card.innerHTML = `
+                        <div class="flex items-center gap-2.5">
+                            <div class="w-8 h-8 bg-emerald-100 text-emerald-800 rounded-lg flex items-center justify-center">
+                                <i class="fa-solid fa-${ing.icon}"></i>
+                            </div>
+                            <span class="font-bold text-slate-800">${ing.name}</span>
+                        </div>
+                        <span class="font-extrabold text-slate-500 bg-white border px-2 py-1 rounded-lg">${ing.weight.toLocaleString(undefined, {maximumFractionDigits: 1})} ${ing.unit}</span>
+                    `;
+                    ingredientsContainer.appendChild(card);
+                });
+
+                // Update badge to verified AI Generated state
+                if (aiBadge) {
+                    aiBadge.innerHTML = `
+                        <span class="bg-emerald-100 text-emerald-800 text-[9px] px-2 py-0.5 rounded-full font-bold flex items-center gap-1">
+                            <i class="fa-solid fa-wand-magic-sparkles text-emerald-600"></i> AI Generated
+                        </span>
+                        <span class="text-[10px] text-emerald-700 font-bold flex items-center gap-1"><i class="fa-solid fa-shield-halved"></i> Gizi Seimbang</span>
+                    `;
+                }
+            }, 300);
+
+            // Calculate total price with verified indicator
+            const totalPrice = pricePerPortion * portionCount;
+            document.getElementById('total-price-display').innerHTML = `
+                Rp ${totalPrice.toLocaleString()} 
+                <span class="text-[9px] bg-emerald-100 text-emerald-800 font-extrabold px-1.5 py-0.5 rounded-full ml-1"><i class="fa-solid fa-link"></i> BC Verified</span>
+            `;
+        }
+
+        function matchFarmersDirectly() {
+            switchTab('blockchain');
+        }
+
+        // Simulated AI HACCP camera scanner logic
+        function simulateHACCP(preset) {
+            const camImg = document.getElementById('haccp-camera-img');
+            const placeholder = document.getElementById('haccp-placeholder-text');
+            const resultDetails = document.getElementById('haccp-result-details');
+            const boxDanger = document.getElementById('haccp-bounding-box');
+            const boxSafe = document.getElementById('haccp-bounding-box-safe');
+
+            const scoreText = document.getElementById('haccp-score');
+            const verdictTitle = document.getElementById('haccp-verdict-title');
+            const verdictDesc = document.getElementById('haccp-verdict-desc');
+            const categorySpan = document.getElementById('haccp-category-span');
+            const tempSpan = document.getElementById('haccp-temp-span');
+            const packagingSpan = document.getElementById('haccp-packaging-span');
+            const adviceBox = document.getElementById('haccp-advice-box');
+            const indicatorIcon = document.getElementById('haccp-indicator-icon');
+
+            placeholder.classList.add('hidden');
+            resultDetails.classList.remove('hidden');
+
+            boxDanger.classList.add('hidden');
+            boxSafe.classList.add('hidden');
+
+            if (preset === 'styrofoam') {
+                camImg.src = "https://placehold.co/600x350/ffe4e6/991b1b?text=Wadah+Sup+Styrofoam+Terbuka";
+                boxDanger.classList.remove('hidden');
+                document.getElementById('haccp-bounding-tag').innerText = "BAHAYA: STYROFOAM DETECTED";
+
+                scoreText.innerText = "42/100";
+                scoreText.className = "text-sm font-black text-red-600 bg-red-50 px-2.5 py-0.5 rounded-full";
+
+                verdictTitle.innerText = "Peringatan Kontaminasi Wadah!";
+                verdictDesc.innerText = "Styrofoam memicu pelepasan bahan berbahaya stirena saat terkena kuah sup bersuhu tinggi (>70°C).";
+                
+                categorySpan.innerText = "Wadah / Kemasan Distribusi";
+                tempSpan.innerText = "85°C (Terlalu Panas)";
+                packagingSpan.innerText = "Styrofoam (Dilarang)";
+
+                indicatorIcon.className = "w-7 h-7 rounded-full bg-red-100 text-red-600 flex items-center justify-center text-xs mt-0.5";
+                indicatorIcon.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i>`;
+
+                adviceBox.className = "p-3 rounded-2xl text-xs space-y-1 bg-red-50 text-red-900 border border-red-100";
+                adviceBox.innerHTML = `
+                    <p class="font-bold">Rekomendasi Tindakan Segera:</p>
+                    <p>Hentikan pembagian makanan! Pindahkan sup kuah panas ke wadah plastik kode 5 (PP) atau stainless steel bersertifikasi foodgrade.</p>
+                `;
+
+            } else if (preset === 'plastic') {
+                camImg.src = "https://placehold.co/600x350/ffe4e6/991b1b?text=Makanan+Panas+Bungkus+Kresek";
+                boxDanger.classList.remove('hidden');
+                document.getElementById('haccp-bounding-tag').innerText = "RISIKO: PLASTIK KRESEK HITAM";
+
+                scoreText.innerText = "35/100";
+                scoreText.className = "text-sm font-black text-red-600 bg-red-50 px-2.5 py-0.5 rounded-full";
+
+                verdictTitle.innerText = "Bahaya Kresek Daur Ulang!";
+                verdictDesc.innerText = "Plastik kresek hitam terbuat dari daur ulang polimer yang mengandung klorin, berbahaya saat bersentuhan dengan makanan berlemak dan panas.";
+                
+                categorySpan.innerText = "Kebersihan & Penyajian";
+                tempSpan.innerText = "78°C (Berbahaya)";
+                packagingSpan.innerText = "Kresek Hitam Daur Ulang";
+
+                indicatorIcon.className = "w-7 h-7 rounded-full bg-red-100 text-red-600 flex items-center justify-center text-xs mt-0.5";
+                indicatorIcon.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i>`;
+
+                adviceBox.className = "p-3 rounded-2xl text-xs space-y-1 bg-red-50 text-red-900 border border-red-100";
+                adviceBox.innerHTML = `
+                    <p class="font-bold">Rekomendasi Tindakan Segera:</p>
+                    <p>Gunakan wadah kertas berlapisan lilin foodgrade atau kemasan kotak biodegradabel berbahan serat tebu/singkong.</p>
+                `;
+
+            } else if (preset === 'stainless') {
+                camImg.src = "https://placehold.co/600x350/ecfdf5/065f46?text=Stainless+Steel+Wadah+Saji";
+                boxSafe.classList.remove('hidden');
+                document.getElementById('haccp-bounding-tag-safe').innerText = "AMAN: FOOD GRADE STAINLESS";
+
+                scoreText.innerText = "98/100";
+                scoreText.className = "text-sm font-black text-emerald-600 bg-emerald-50 px-2.5 py-0.5 rounded-full";
+
+                verdictTitle.innerText = "Sangat Higienis & Aman";
+                verdictDesc.innerText = "Wadah stainless steel meminimalkan risiko perpindahan partikel kimia dan mudah disterilkan secara masif.";
+                
+                categorySpan.innerText = "Material Serving Dapur";
+                tempSpan.innerText = "65°C (Suhu Hangat Ideal)";
+                packagingSpan.innerText = "SUS 304 Foodgrade";
+
+                indicatorIcon.className = "w-7 h-7 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-xs mt-0.5";
+                indicatorIcon.innerHTML = `<i class="fa-solid fa-circle-check"></i>`;
+
+                adviceBox.className = "p-3 rounded-2xl text-xs space-y-1 bg-emerald-50 text-emerald-900 border border-emerald-100";
+                adviceBox.innerHTML = `
+                    <p class="font-bold">Status Verifikasi:</p>
+                    <p>Sangat direkomendasikan untuk pendistribusian makanan Program Makan Bergizi Gratis skala besar.</p>
+                `;
+
+            } else if (preset === 'dirty') {
+                camImg.src = "https://placehold.co/600x350/fffbeb/92400e?text=Dapur+Meja+Saji+Kotor";
+                boxDanger.classList.remove('hidden');
+                document.getElementById('haccp-bounding-tag').innerText = "PERINGATAN: KOTOR & KONTAMINASI";
+
+                scoreText.innerText = "55/100";
+                scoreText.className = "text-sm font-black text-amber-600 bg-amber-50 px-2.5 py-0.5 rounded-full";
+
+                verdictTitle.innerText = "Kebersihan Meja Kurang";
+                verdictDesc.innerText = "Ditemukan sisa bahan makanan kotor di dekat area pengemasan akhir, berpotensi mengundang lalat dan kontaminasi bakteri.";
+                
+                categorySpan.innerText = "Kebersihan Area Produksi";
+                tempSpan.innerText = "28°C (Suhu Ruang)";
+                packagingSpan.innerText = "Stainless Meja Kotor";
+
+                indicatorIcon.className = "w-7 h-7 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center text-xs mt-0.5";
+                indicatorIcon.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i>`;
+
+                adviceBox.className = "p-3 rounded-2xl text-xs space-y-1 bg-amber-50 text-amber-900 border border-amber-100";
+                adviceBox.innerHTML = `
+                    <p class="font-bold">Rekomendasi Tindakan Segera:</p>
+                    <p>Bersihkan meja produksi dengan larutan disinfektan klorin 100ppm sebelum memulai proses pengemasan menu selanjutnya.</p>
+                `;
+            }
+        }
+
+        // Circular Food waste recording logic
+        function submitWasteToBlockchain() {
+            const weightInput = document.getElementById('waste-weight-input').value;
+            if (!weightInput || parseFloat(weightInput) <= 0) {
+                alert("Silakan masukkan berat limbah yang valid!");
+                return;
+            }
+
+            const weight = parseFloat(weightInput);
+            const partnerSelect = document.getElementById('waste-partner-select');
+            const partnerText = partnerSelect.options[partnerSelect.selectedIndex].text;
+
+            // Trigger Blockchain notification
+            const toast = document.getElementById('notification-toast');
+            toast.querySelector('p.text-xs').innerText = `Limbah ${weight} Kg Terdaftarkan di Blockchain`;
+            toast.querySelector('p.text-[10px]').innerText = `Berhasil disalurkan ke: ${partnerText}.`;
+            toast.classList.remove('hidden');
+
+            // Dynamically update impacts stats
+            const totalWeightElem = document.getElementById('circular-total-weight');
+            const totalPointsElem = document.getElementById('circular-total-points');
+
+            const currentWeight = parseFloat(totalWeightElem.innerText);
+            const currentPoints = parseInt(totalPointsElem.innerText.replace(/,/g, ''));
+
+            const newWeight = currentWeight + weight;
+            const newPoints = currentPoints + (weight * 10); // 1kg = 10 Eco Poin
+
+            totalWeightElem.innerText = newWeight + " Kg";
+            totalPointsElem.innerText = newPoints.toLocaleString() + " Poin";
+
+            // Reset Input
+            document.getElementById('waste-weight-input').value = '';
+
+            // Auto switch to home screen to show transaction notification
+            setTimeout(() => {
+                switchTab('home');
+                toast.classList.add('hidden');
+            }, 3000);
+        }
+
+        // Interactive PANGANIN AI Chatbot simulator
+        function handleChatEnter(event) {
+            if (event.key === 'Enter') {
+                sendMessageFromInput();
+            }
+        }
+
+        function sendMessageFromInput() {
+            const input = document.getElementById('chat-user-input');
+            const query = input.value.trim();
+            if (!query) return;
+
+            renderUserChatMessage(query);
+            input.value = '';
+
+            // Generate AI response
+            setTimeout(() => {
+                getAIResponse(query);
+            }, 1000);
+        }
+
+        function sendPredefinedQuery(query) {
+            renderUserChatMessage(query);
+            setTimeout(() => {
+                getAIResponse(query);
+            }, 1000);
+        }
+
+        function renderUserChatMessage(text) {
+            const container = document.getElementById('chat-messages-container');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = "flex items-start gap-2 max-w-[85%] ml-auto justify-end";
+            messageDiv.innerHTML = `
+                <div class="bg-emerald-600 text-white p-3 rounded-2xl rounded-tr-none shadow-sm text-xs">
+                    <p class="leading-relaxed">${text}</p>
+                </div>
+                <div class="w-6.5 h-6.5 bg-emerald-700 text-white rounded-full flex items-center justify-center text-[10px] p-1.5 font-bold">ME</div>
+            `;
+            container.appendChild(messageDiv);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function getAIResponse(query) {
+            const container = document.getElementById('chat-messages-container');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = "flex items-start gap-2 max-w-[85%]";
+            
+            let reply = "";
+            const lowerQuery = query.toLowerCase();
+
+            if (lowerQuery.includes('dingin') || lowerQuery.includes('masak')) {
+                reply = "Untuk menghindari makanan dingin pada program porsi besar (seperti kritik masukan Wapres Gibran): \n\n1. **Prinsip T-T-T (Time, Temp, Trade)**: Jeda waktu antara selesai masak & distribusi tidak boleh lebih dari 4 jam jika tanpa pemanas. \n2. **Gunakan Thermal Insulated Box**: Simpan wadah stainless dalam kotak berisolasi busa poliuretan tebal agar suhu bertahan di atas 60°C.";
+            } else if (lowerQuery.includes('plastik') || lowerQuery.includes('kresek') || lowerQuery.includes('styrofoam') || lowerQuery.includes('wadah')) {
+                reply = "Wadah non-foodgrade sangat berbahaya bagi kesehatan!\n\n* **Plastik Kresek Hitam**: Hasil daur ulang kotor. Panas memicu perpindahan logam berat & klorin.\n* **Styrofoam**: Mengandung zat residu karsinogenik (Benzena/Stirena). Sangat dilarang untuk kuah bersuhu >70°C.\n* **Rekomendasi**: Gunakan wadah plastik PP (Kode 5) atau kemasan serat tanaman (bagasse) biodegradable yang aman.";
+            } else if (lowerQuery.includes('blockchain') || lowerQuery.includes('tani') || lowerQuery.includes('petani')) {
+                reply = "Sistem **PANGANIN Blockchain** mencatat data pasokan pangan langsung dari petani lokal tanpa perantara tengkulak. \n\nKeuntungannya: \n1. **Transparansi Harga**: Memastikan harga beli transparan di ledger digital guna mencegah korupsi atau manipulasi anggaran program gizi.\n2. **Rantai Pasok Kilat**: Menghubungkan logistik terdekat sehingga makanan lebih segar saat sampai ke dapur massal.";
+            } else if (lowerQuery.includes('haccp')) {
+                reply = "Analisis **HACCP (Hazard Analysis Critical Control Point)** di Panganin melacak kebersihan dapur Anda. Anda bisa memoto meja produksi atau wadah penyajian, dan AI kami akan mengukur skor higienitas, potensi cemaran mikroba silang, serta memberikan checklist digital secara otomatis.";
+            } else {
+                reply = "Terima kasih atas pertanyaannya! Saya dapat memandu Anda untuk optimasi resep massal bergizi, mendeteksi bahaya wadah saji (styrofoam/kresek) dengan AI scanner, serta pencocokan petani lokal via blockchain. Silakan ketik pertanyaan yang lebih spesifik.";
+            }
+
+            // Convert raw bullets to html layout
+            const formattedReply = reply.replace(/\n/g, '<br>');
+
+            messageDiv.innerHTML = `
+                <div class="w-6.5 h-6.5 bg-emerald-100 text-emerald-800 rounded-full flex items-center justify-center text-[10px] p-1.5">AI</div>
+                <div class="bg-white border border-slate-100 p-3 rounded-2xl rounded-tl-none shadow-sm text-xs">
+                    <p class="leading-relaxed text-slate-800">${formattedReply}</p>
+                </div>
+            `;
+            container.appendChild(messageDiv);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        // Initialize default app state
+        window.onload = function() {
+            calculatePortion();
+        };
+    </script>
+</body>
+</html>
