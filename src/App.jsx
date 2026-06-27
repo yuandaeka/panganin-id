@@ -8,10 +8,21 @@ import LedgerBcScreen from './components/LedgerBcScreen';
 import WasteTrackerScreen from './components/WasteTrackerScreen';
 import AiChatbotScreen from './components/AiChatbotScreen';
 import NewsPortalScreen from './components/NewsPortalScreen';
+import EmergencyScreen from './components/EmergencyScreen';
+import ProfileScreen from './components/ProfileScreen';
 import './App.css';
 
 export default function App() {
   const [activePage, setActivePage] = useState('home');
+  const [darkMode, setDarkMode] = useState(false);
+  const [profile, setProfile] = useState({
+    name: "Chef Amir",
+    email: "amir.kitchen@panganin.id",
+    phone: "+62 812-3456-7890",
+    dapur: "Dapur MBG Solo",
+    image: null,
+    language: "id"
+  });
   const [selectedArticle, setSelectedArticle] = useState(null);
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState({
@@ -59,17 +70,22 @@ export default function App() {
   };
 
   return (
-    <div className="h-screen w-full bg-slate-50 text-slate-800 antialiased font-sans flex flex-col justify-center items-center overflow-hidden">
+    <div className={`h-screen w-full bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-150 antialiased font-sans flex flex-col justify-center items-center overflow-hidden ${darkMode ? 'dark' : ''}`}>
       
       {/* MAIN INTERACTIVE HUB (Locked to Viewport Height to prevent body scroll) */}
-      <main className="h-screen max-w-md w-full bg-white shadow-xl shadow-slate-100 flex flex-col relative overflow-hidden">
+      <main className="h-screen max-w-md w-full bg-white dark:bg-slate-900 shadow-xl shadow-slate-100 dark:shadow-slate-950/20 flex flex-col relative overflow-hidden">
         
         {/* Top brand header, hidden on chatbot screen */}
         {activePage !== 'chatbot' && (
-          <TopHeader onNotificationToggle={() => triggerNotification(
-            "Transaksi Blockchain Terverifikasi",
-            "Sisa limbah organik berhasil disalurkan ke CV EcoEnzym Surakarta."
-          )} />
+          <TopHeader 
+            userInitials={profile.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()}
+            userImage={profile.image}
+            onProfileClick={() => setActivePage('profile')}
+            onNotificationToggle={() => triggerNotification(
+              profile.language === 'id' ? "Transaksi Blockchain Terverifikasi" : "Blockchain Transaction Verified",
+              profile.language === 'id' ? "Sisa limbah organik berhasil disalurkan ke CV EcoEnzym Surakarta." : "Organic waste residue successfully distributed to CV EcoEnzym Surakarta."
+            )} 
+          />
         )}
 
         {/* Notification Banner Toast (Absolute position below TopHeader) */}
@@ -97,7 +113,7 @@ export default function App() {
         {activePage !== 'chatbot' ? (
           <div className="flex-1 overflow-y-auto relative pb-28 pt-1">
             {activePage === 'home' && (
-              <HomeScreen onSwitchTab={setActivePage} onSelectArticle={setSelectedArticle} />
+              <HomeScreen onSwitchTab={setActivePage} onSelectArticle={setSelectedArticle} profileName={profile.name} />
             )}
 
             {activePage === 'news' && (
@@ -132,6 +148,22 @@ export default function App() {
                 onSubmitWaste={handleSubmitWaste} 
                 totalWeight={totalWasteWeight}
                 totalPoints={totalWastePoints}
+              />
+            )}
+
+            {activePage === 'emergency' && (
+              <EmergencyScreen 
+                onBackToHome={() => setActivePage('home')} 
+              />
+            )}
+
+            {activePage === 'profile' && (
+              <ProfileScreen 
+                onBackToHome={() => setActivePage('home')} 
+                profile={profile}
+                setProfile={setProfile}
+                darkMode={darkMode}
+                setDarkMode={setDarkMode}
               />
             )}
           </div>

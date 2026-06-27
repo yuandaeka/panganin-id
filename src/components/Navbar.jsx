@@ -1,6 +1,8 @@
 import React from 'react';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function Navbar({ activePage, setActivePage }) {
+  const { t } = useLanguage();
   return (
     <nav className="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-slate-900 text-white border-t border-slate-800 px-6 py-3 rounded-t-3xl flex justify-between items-center z-50 shadow-2xl">
       {/* Nav Item: Home */}
@@ -12,7 +14,7 @@ export default function Navbar({ activePage, setActivePage }) {
         }`}
       >
         <i className="fa-solid fa-house text-lg"></i>
-        <span className="text-[9px] font-bold">Beranda</span>
+        <span className="text-[9px] font-bold">{t('navHome')}</span>
       </button>
 
       {/* Nav Item: Portion Planner */}
@@ -24,7 +26,7 @@ export default function Navbar({ activePage, setActivePage }) {
         }`}
       >
         <i className="fa-solid fa-calculator text-lg"></i>
-        <span className="text-[9px] font-bold">Portion AI</span>
+        <span className="text-[9px] font-bold">{t('navPlanner')}</span>
       </button>
 
       {/* Centered Floating AI Assistant FAB Button */}
@@ -48,7 +50,7 @@ export default function Navbar({ activePage, setActivePage }) {
         }`}
       >
         <i className="fa-solid fa-camera-retro text-lg"></i>
-        <span className="text-[9px] font-bold">HACCP Scan</span>
+        <span className="text-[9px] font-bold">{t('navHaccp')}</span>
       </button>
 
       {/* Nav Item: Ledger BC */}
@@ -60,7 +62,7 @@ export default function Navbar({ activePage, setActivePage }) {
         }`}
       >
         <i className="fa-solid fa-link text-lg"></i>
-        <span className="text-[9px] font-bold">Ledger BC</span>
+        <span className="text-[9px] font-bold">{t('navLedger')}</span>
       </button>
     </nav>
   );
