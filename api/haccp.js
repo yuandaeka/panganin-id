@@ -1,34 +1,68 @@
 // Vercel Serverless Function: Panganin HACCP Image Analysis
 // Uses Gemini Vision API. Key read from SERVER-side env var (no VITE_ prefix).
-// Returns a structured analysis object compatible with HaccpScannerScreen.
+// The AI first VALIDATES that the photo matches the selected category
+// (dapur / bahan / kemasan), then performs a real HACCP analysis.
+// Returns { ok, analysis } or { ok:false, rejected, reason }.
 
 export const config = {
   maxDuration: 60,
 };
 
+const CATEGORY_RULES = {
+  dapur: {
+    label: 'foto dapur / area memasak (kompor, meja saji, talenan, wastafel dapur, peralatan masak)',
+    mismatchHint: 'foto ini menunjukkan hal lain seperti ruang tamu, kamar, kantor, halaman, orang, atau benda non-dapur.',
+    rejectMsg: 'Foto ini bukan dapur.',
+  },
+  bahan: {
+    label: 'foto bahan baku pangan (sayur, daging, ayam, ikan, telur, buah, bumbu, tepung, bahan segar)',
+    mismatchHint: 'foto ini bukan bahan baku pangan mentah.',
+    rejectMsg: 'Foto ini bukan bahan baku pangan.',
+  },
+  kemasan: {
+    label: 'foto wadah/kemasan makanan (styrofoam, plastik, kertas box, botol, tempat makan, gelas plastik)',
+    mismatchHint: 'foto ini bukan wadah/kemasan pangan.',
+    rejectMsg: 'Foto ini bukan kemasan/wadah pangan.',
+  },
+};
+
 const buildPrompt = (tab, ingredientInput, isBranded) => {
-  const tabInstruction = {
-    dapur: "Analisis foto dapur untuk audit kebersihan, tata letak, dan sanitasi sesuai standar HACCP. Berikan skor 0-100, verdict, kategori, suhu lingkungan, material utama, dan rekomendasi perbaikan.",
-    bahan: `Analisis foto bahan pangan${ingredientInput ? ` dengan deskripsi berikut: ${ingredientInput}` : ''} untuk mengidentifikasi potensi bahaya HACCP. Berikan skor 0-100, verdict, kategori, cara penyimpanan, batas waktu simpan, dan 3 jenis cemaran (fisik, kimia, mikrobiologi).${isBranded ? ' Bahan berlabel merek pabrikan (BPOM/HALAL) - nilai risiko lebih rendah.' : ''}`,
-    kemasan: "Analisis foto wadah/kemasan makanan untuk menguji keamanan bahan kemasan (styrofoam, plastik, kertas, dll) terhadap pangan panas. Berikan skor 0-100, verdict, kategori, batas suhu aman, jenis kemasan, dan rekomendasi."
-  }[tab] || "Analisis foto untuk audit keamanan pangan HACCP.";
+  const rule = CATEGORY_RULES[tab] || CATEGORY_RULES.dapur;
 
-  return `${tabInstruction}
+  const analysisInstruction = {
+    dapur: 'Audit kebersihan, tata letak, dan sanitasi dapur sesuai HACCP. Berikan skor 0-100, verdict, kategori, suhu lingkungan, material utama, dan rekomendasi perbaikan.',
+    bahan: `Identifikasi titik kritis bahaya (CCP) bahan pangan${ingredientInput ? ` dengan deskripsi: ${ingredientInput}` : ''}. Berikan skor 0-100, verdict, kategori, cara penyimpanan, batas waktu simpan, dan 3 jenis cemaran (fisik, kimia, mikrobiologi).${isBranded ? ' Bahan berlabel merek pabrikan (BPOM/HALAL) - nilai risiko lebih rendah.' : ''}`,
+    kemasan: 'Uji keamanan bahan kemasan (styrofoam, plastik, kertas, dll) terhadap pangan panas. Berikan skor 0-100, verdict, kategori, batas suhu aman, jenis kemasan, dan rekomendasi.',
+  }[tab] || 'Analisis foto untuk audit keamanan pangan HACCP.';
 
-SILAKAN JALANKAN ANALISIS DAN KEMBALIKAN HANYA SEBUAH OBJEK JSON (tanpa markdown, tanpa komentar) dengan struktur berikut:
+  return `Anda adalah ahli audit HACCP (Hazard Analysis Critical Control Point) yang berpengalaman.
+
+TUGAS: Analisis foto berikut.
+
+LANGKAH 1 - VALIDASI KATEGORI (WAJIB, paling penting):
+Pengguna memilih kategori "${tab}". Suatu foto dianggap VALID hanya jika foto tersebut dengan jelas menunjukkan ${rule.label}.
+- Jika foto TIDAK menunjukkan hal itu (${rule.mismatchHint}), maka LANGKAH 2 TIDAK PERLU DILAKUKAN. Cukup kembalikan objek JSON dengan "valid": false dan jelaskan alasannya.
+- Jika foto VALID, lanjut ke LANGKAH 2.
+
+LANGKAH 2 - ANALISIS HACCP (hanya jika foto valid):
+${analysisInstruction}
+
+KEMBALIKAN HANYA SEBUAH OBJEK JSON (tanpa markdown, tanpa komentar) dengan struktur:
 {
-  "title": "judul singkat hasil analisis",
-  "score": "angka/100 contoh: 72/100",
-  "verdictTitle": "judul vonis pendek",
-  "verdictDesc": "penjelasan vonis 1-2 kalimat",
-  "category": "kategori kontrol",
-  "temp": "suhu/cara penyimpanan",
-  "packaging": "jenis material / batas waktu",
-  "cemaranFisik": "deskripsi bahaya benda asing (hanya untuk tab bahan)",
-  "cemaranKimia": "deskripsi bahaya zat toksik (hanya untuk tab bahan)",
-  "cemaranMikrobiologi": "deskripsi bahaya bakteri/patogen (hanya untuk tab bahan)",
-  "adviceTitle": "judul rekomendasi",
-  "adviceText": "rekomendasi tindakan praktis"
+  "valid": true atau false,
+  "rejection": "isi pesan penolakan jika valid=false, contoh: '${rule.rejectMsg} Mohon unggah foto ${tab} yang benar.'",
+  "title": "judul singkat hasil analisis (jika valid)",
+  "score": "angka/100 contoh: 72/100 (jika valid)",
+  "verdictTitle": "judul vonis pendek (jika valid)",
+  "verdictDesc": "penjelasan vonis 1-2 kalimat (jika valid)",
+  "category": "kategori kontrol (jika valid)",
+  "temp": "suhu/cara penyimpanan (jika valid)",
+  "packaging": "jenis material / batas waktu (jika valid)",
+  "cemaranFisik": "deskripsi bahaya benda asing, khusus tab bahan (jika valid)",
+  "cemaranKimia": "deskripsi bahaya zat toksik, khusus tab bahan (jika valid)",
+  "cemaranMikrobiologi": "deskripsi bahaya bakteri/patogen, khusus tab bahan (jika valid)",
+  "adviceTitle": "judul rekomendasi (jika valid)",
+  "adviceText": "rekomendasi tindakan praktis (jika valid)"
 }`;
 };
 
@@ -96,6 +130,13 @@ export default async function handler(req, res) {
     if (!raw) throw new Error('Format respon Gemini tidak valid.');
 
     const parsed = JSON.parse(raw.replace(/^```(?:json)?\s*|\s*```$/g, '').trim());
+
+    // Validation rejected the category
+    if (parsed.valid === false) {
+      const reason = parsed.rejection || 'Foto tidak sesuai dengan kategori yang dipilih.';
+      res.status(200).json({ ok: false, rejected: true, reason });
+      return;
+    }
 
     const scoreNum = parseInt(String(parsed.score).replace(/\D/g, ''), 10) || 70;
     const boxType = scoreNum >= 65 ? 'safe' : 'danger';

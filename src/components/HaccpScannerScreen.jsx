@@ -222,8 +222,10 @@ const kemasanPresets = {
 };
 
 // Analyze an image using the serverless API (Gemini Vision runs on the server).
-// Returns a structured analysis object compatible with currentData,
-// or null when the server rejects/fails (caller falls back to presets).
+// Returns:
+//   { ok: true, analysis }                    -> real HACCP analysis
+//   { ok: false, rejected: true, reason }     -> photo does NOT match category
+//   { ok: false, rejected: false, reason }    -> server/network error
 const analyzeImageWithGemini = async ({ imageDataUrl, tab, ingredientInput = '', isBranded = false }) => {
   try {
     const response = await fetch('/api/haccp', {
@@ -234,7 +236,12 @@ const analyzeImageWithGemini = async ({ imageDataUrl, tab, ingredientInput = '',
 
     const data = await response.json();
     if (!response.ok) {
-      throw new Error(data.error || `Server HACCP gagal (HTTP ${response.status}).`);
+      return { ok: false, rejected: false, reason: data.error || `Server HACCP gagal (HTTP ${response.status}).` };
+    }
+
+    // AI rejected the category
+    if (data.ok === false) {
+      return { ok: false, rejected: true, reason: data.reason || 'Foto tidak sesuai dengan kategori yang dipilih.' };
     }
 
     const parsed = data.analysis;
@@ -243,32 +250,35 @@ const analyzeImageWithGemini = async ({ imageDataUrl, tab, ingredientInput = '',
     const isBahanTab = tab === 'bahan';
 
     return {
-      title: parsed.title,
-      image: imageDataUrl,
-      boxType: parsed.boxType || boxType,
-      boxTag: parsed.boxTag || (boxType === 'safe' ? 'CHECKED: AMAN (HACCP)' : 'PERINGATAN: BERISIKO'),
-      boxStyle: parsed.boxStyle || { top: '15%', left: '15%', width: '70%', height: '70%' },
-      score: parsed.score,
-      scoreClass: parsed.scoreClass,
-      verdictTitle: parsed.verdictTitle,
-      verdictDesc: parsed.verdictDesc,
-      category: parsed.category,
-      temp: parsed.temp,
-      packaging: parsed.packaging,
-      icon: parsed.icon,
-      iconBg: parsed.iconBg,
-      adviceClass: parsed.adviceClass,
-      adviceTitle: parsed.adviceTitle,
-      adviceText: parsed.adviceText,
-      cemaranFisik: parsed.cemaranFisik || '',
-      cemaranKimia: parsed.cemaranKimia || '',
-      cemaranMikrobiologi: parsed.cemaranMikrobiologi || '',
-      brandedAdvice: parsed.brandedAdvice || '',
-      isBahan: isBahanTab
+      ok: true,
+      analysis: {
+        title: parsed.title,
+        image: imageDataUrl,
+        boxType: parsed.boxType || boxType,
+        boxTag: parsed.boxTag || (boxType === 'safe' ? 'CHECKED: AMAN (HACCP)' : 'PERINGATAN: BERISIKO'),
+        boxStyle: parsed.boxStyle || { top: '15%', left: '15%', width: '70%', height: '70%' },
+        score: parsed.score,
+        scoreClass: parsed.scoreClass,
+        verdictTitle: parsed.verdictTitle,
+        verdictDesc: parsed.verdictDesc,
+        category: parsed.category,
+        temp: parsed.temp,
+        packaging: parsed.packaging,
+        icon: parsed.icon,
+        iconBg: parsed.iconBg,
+        adviceClass: parsed.adviceClass,
+        adviceTitle: parsed.adviceTitle,
+        adviceText: parsed.adviceText,
+        cemaranFisik: parsed.cemaranFisik || '',
+        cemaranKimia: parsed.cemaranKimia || '',
+        cemaranMikrobiologi: parsed.cemaranMikrobiologi || '',
+        brandedAdvice: parsed.brandedAdvice || '',
+        isBahan: isBahanTab
+      }
     };
   } catch (err) {
     console.error("HACCP vision analysis failed:", err);
-    return null;
+    return { ok: false, rejected: false, reason: 'Gagal terhubung ke server analisis. Cek koneksi internet.' };
   }
 };
 
@@ -400,6 +410,9 @@ export default function HaccpScannerScreen({ onBackToHome }) {
   const [selectedPreset, setSelectedPreset] = useState(null);
   const [isScanning, setIsScanning] = useState(false);
   const [currentData, setCurrentData] = useState(null);
+  // Notice shown when AI rejects the photo category or analysis fails.
+  // { type: 'rejected' | 'error', message: string }
+  const [analysisNotice, setAnalysisNotice] = useState(null);
 
   // Live Camera and Fallback States
   const [isCameraActive, setIsCameraActive] = useState(false);
@@ -434,6 +447,7 @@ export default function HaccpScannerScreen({ onBackToHome }) {
     setAttachedFileName('');
     setSelectedPreset(null);
     setCurrentData(null);
+    setAnalysisNotice(null);
     setCameraToast('');
     setIngredientInput('');
     setIsBranded(false);
@@ -534,43 +548,28 @@ export default function HaccpScannerScreen({ onBackToHome }) {
         setCapturedImage(imgData);
         stopCameraStream(); // Turn off webcam after capture
 
-        const fallbackResult = () => {
-          setIsScanning(false);
-          if (activeTab === 'dapur') {
-            setSelectedPreset('dapur_bersih');
-            setCurrentData({
-              ...dapurPresets.dapur_bersih,
-              image: imgData,
-              verdictTitle: "Dapur Terverifikasi via Foto Live",
-              verdictDesc: "Analisis AI pada foto live menunjukkan zonasi area penyiapan Anda bersih dari sisa pangan berlebih dan struktur penataan meja saji yang memadai."
-            });
-          } else if (activeTab === 'bahan') {
-            setSelectedPreset(null);
-            setCurrentData(analyzeFileBahan("Foto Live", imgData, ingredientInput, isBranded));
-          } else {
-            // kemasan
-            setSelectedPreset('kemasan_pp5');
-            setCurrentData({
-              ...kemasanPresets.kemasan_pp5,
-              image: imgData,
-              verdictTitle: "Kemasan Terverifikasi via Foto Live",
-              verdictDesc: "Analisis AI real-time mendeteksi wadah penutup yang aman untuk menghalau kontaminasi udara dan serangga."
-            });
-          }
-        };
-
-        // Try real Gemini Vision analysis, fall back to presets when unavailable
+        // Real Gemini Vision analysis. NO template fallback - show AI result or notice.
         analyzeImageWithGemini({ imageDataUrl: imgData, tab: activeTab, ingredientInput, isBranded })
           .then((result) => {
-            if (result) {
-              setIsScanning(false);
-              setSelectedPreset(null);
-              setCurrentData(result);
+            setIsScanning(false);
+            setSelectedPreset(null);
+            if (result.ok) {
+              setAnalysisNotice(null);
+              setCurrentData(result.analysis);
             } else {
-              setTimeout(() => fallbackResult(), 1200);
+              setCurrentData(null);
+              setAnalysisNotice({
+                type: result.rejected ? 'rejected' : 'error',
+                message: result.reason
+              });
             }
           })
-          .catch(() => setTimeout(() => fallbackResult(), 1200));
+          .catch((err) => {
+            console.error(err);
+            setIsScanning(false);
+            setCurrentData(null);
+            setAnalysisNotice({ type: 'error', message: 'Gagal menganalisis foto. Coba lagi.' });
+          });
       } catch (err) {
         console.error("Frame capture error:", err);
         setIsScanning(false);
@@ -601,6 +600,7 @@ export default function HaccpScannerScreen({ onBackToHome }) {
     setAttachedFile(null);
     setIsScanning(true);
     setCameraToast('');
+    setAnalysisNotice(null);
 
     setTimeout(() => {
       setSelectedPreset(key);
@@ -638,65 +638,27 @@ export default function HaccpScannerScreen({ onBackToHome }) {
       setAttachedFile(reader.result);
       setIsScanning(true);
 
-      const fallbackResult = () => {
-        setIsScanning(false);
-        if (activeTab === 'dapur') {
-          setCurrentData({
-            title: `Foto Dapur: ${file.name}`,
-            image: reader.result,
-            boxType: "safe",
-            boxTag: "CHECKED: TATA LETAK OK",
-            boxStyle: { top: '15%', left: '15%', width: '70%', height: '70%' },
-            score: "94/100",
-            scoreClass: "text-emerald-700 bg-emerald-50 border-emerald-100",
-            verdictTitle: "Audit Foto Dapur Selesai",
-            verdictDesc: "Analisis citra menunjukkan layout dapur bersih. Penempatan talenan terpisah dan area kompor bebas dari sisa tumpahan minyak/bahan makanan.",
-            category: "Tata Letak & Kebersihan",
-            temp: "25°C (Suhu Ruang Sesuai)",
-            packaging: "Higienis & Terorganisir",
-            icon: "fa-solid fa-cloud-arrow-up text-emerald-600",
-            iconBg: "bg-emerald-100",
-            adviceClass: "bg-emerald-50 text-emerald-900 border border-emerald-100",
-            adviceTitle: "Rekomendasi AI:",
-            adviceText: "Kondisi dapur baik. Jaga kerapian dengan tidak menumpuk lap kotor di meja saji guna menekan perkembangbiakan lalat."
-          });
-        } else if (activeTab === 'bahan') {
-          setCurrentData(analyzeFileBahan(file.name, reader.result, ingredientInput, isBranded));
-        } else {
-          // kemasan
-          setCurrentData({
-            title: `Bahan Kemas: ${file.name}`,
-            image: reader.result,
-            boxType: "safe",
-            boxTag: "CHECKED: KEMASAN AMAN",
-            boxStyle: { top: '20%', left: '20%', width: '60%', height: '60%' },
-            score: "91/100",
-            scoreClass: "text-emerald-700 bg-emerald-50 border-emerald-100",
-            verdictTitle: "Deteksi Keamanan Kemasan Sukses",
-            verdictDesc: "Analisis kemasan menunjukkan bahan yang digunakan non-karsinogenik dan terbungkus rapat dari bahaya debu luar.",
-            category: "Bahan Kemasan Produk",
-            temp: "Batas Suhu Aman: 90°C",
-            packaging: "Laminasi Food-Grade Aman",
-            icon: "fa-solid fa-cloud-arrow-up text-emerald-600",
-            iconBg: "bg-emerald-100",
-            adviceClass: "bg-emerald-50 text-emerald-900 border border-emerald-100",
-            adviceTitle: "Rekomendasi AI:",
-            adviceText: "Bahan kemasan aman digunakan. Pastikan penutupan wadah (seal) benar-benar rapat sebelum didistribusikan."
-          });
-        }
-      };
-
-      // Try real Gemini Vision analysis, fall back to presets when unavailable
+      // Real Gemini Vision analysis. NO template fallback - show AI result or notice.
       analyzeImageWithGemini({ imageDataUrl: reader.result, tab: activeTab, ingredientInput, isBranded })
         .then((result) => {
-          if (result) {
-            setIsScanning(false);
-            setCurrentData(result);
+          setIsScanning(false);
+          if (result.ok) {
+            setAnalysisNotice(null);
+            setCurrentData(result.analysis);
           } else {
-            setTimeout(() => fallbackResult(), 1500);
+            setCurrentData(null);
+            setAnalysisNotice({
+              type: result.rejected ? 'rejected' : 'error',
+              message: result.reason
+            });
           }
         })
-        .catch(() => setTimeout(() => fallbackResult(), 1500));
+        .catch((err) => {
+          console.error(err);
+          setIsScanning(false);
+          setCurrentData(null);
+          setAnalysisNotice({ type: 'error', message: 'Gagal menganalisis foto. Coba lagi.' });
+        });
     };
     reader.readAsDataURL(file);
   };
@@ -707,6 +669,7 @@ export default function HaccpScannerScreen({ onBackToHome }) {
     setCurrentData(null);
     setCapturedImage(null);
     setSelectedPreset(null);
+    setAnalysisNotice(null);
   };
 
   // Run AI analysis on typed ingredients
@@ -716,6 +679,7 @@ export default function HaccpScannerScreen({ onBackToHome }) {
 
     setIsScanning(true);
     setCurrentData(null);
+    setAnalysisNotice(null);
 
     setTimeout(() => {
       const textResult = analyzeBahan(ingredientInput, isBranded);
@@ -1130,7 +1094,42 @@ export default function HaccpScannerScreen({ onBackToHome }) {
           </span>
         </div>
 
-        {!currentData ? (
+        {analysisNotice ? (
+          /* AI REJECTED CATEGORY OR ANALYSIS ERROR */
+          <div className={`p-4 rounded-2xl text-xs space-y-2.5 animate-[fadeIn_0.3s_ease-out] ${
+            analysisNotice.type === 'rejected'
+              ? 'bg-red-50 border border-red-200'
+              : 'bg-amber-50 border border-amber-200'
+          }`}>
+            <div className="flex items-start gap-2.5">
+              <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm shrink-0 ${
+                analysisNotice.type === 'rejected' ? 'bg-red-100 text-red-600' : 'bg-amber-100 text-amber-600'
+              }`}>
+                <i className={`${analysisNotice.type === 'rejected' ? 'fa-solid fa-triangle-exclamation' : 'fa-solid fa-circle-exclamation'}`}></i>
+              </div>
+              <div className="flex-1">
+                <h4 className={`text-xs font-extrabold ${
+                  analysisNotice.type === 'rejected' ? 'text-red-800' : 'text-amber-800'
+                }`}>
+                  {analysisNotice.type === 'rejected'
+                    ? (activeTab === 'dapur' ? 'Foto Bukan Dapur' : activeTab === 'bahan' ? 'Foto Bukan Bahan Baku' : 'Foto Bukan Kemasan')
+                    : 'Analisis Gagal'}
+                </h4>
+                <p className={`text-[10px] mt-1 leading-relaxed ${
+                  analysisNotice.type === 'rejected' ? 'text-red-700' : 'text-amber-700'
+                }`}>
+                  {analysisNotice.message}
+                </p>
+              </div>
+            </div>
+            <p className="text-[10px] text-slate-500 leading-relaxed pt-1 border-t border-slate-200/60">
+              <i className="fa-solid fa-info-circle mr-1"></i>
+              {analysisNotice.type === 'rejected'
+                ? `Unggah ulang foto yang benar-benar menunjukkan ${activeTab === 'dapur' ? 'dapur / area memasak' : activeTab === 'bahan' ? 'bahan baku pangan mentah' : 'wadah / kemasan makanan'} untuk mendapatkan analisis HACCP.`
+                : 'Periksa koneksi internet atau konfigurasi GEMINI_API_KEY di server, lalu coba kembali.'}
+            </p>
+          </div>
+        ) : !currentData ? (
           <div className="text-center py-8 text-slate-400 space-y-3">
             <div className="w-12 h-12 bg-slate-50 rounded-full flex items-center justify-center mx-auto text-slate-350 border border-slate-100">
               <i className="fa-solid fa-network-wired text-lg"></i>
