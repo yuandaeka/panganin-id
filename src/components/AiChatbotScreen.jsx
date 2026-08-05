@@ -15,8 +15,6 @@ const SUGGESTIONS = [
   }
 ];
 
-const SYSTEM_PROMPT = "Anda adalah Panganin AI Assistant, asisten pintar ahli gizi dan konsultan keamanan pangan (HACCP) untuk Program Makan Bergizi Gratis di Indonesia. Bantu jawab pertanyaan seputar gizi masakan massal, regulasi suhu sajian, pencegahan food-waste, harga bahan pangan petani lokal, dan bahaya wadah saji plastik/styrofoam. ATURAN FORMAT JAWABAN: 1) JANGAN gunakan simbol markdown seperti **, *, #, -, atau bullet points. 2) Tulis jawaban dalam bentuk paragraf dan kalimat yang rapi seperti chat assistant profesional. 3) Jika perlu membuat daftar, gunakan angka biasa (1, 2, 3) tanpa simbol apapun. 4) Berikan saran dan rekomendasi praktis di akhir jawaban. 5) Gunakan bahasa Indonesia yang ramah, sopan, dan mudah dipahami. 6) Jawab secara lengkap dan tuntas, jangan terpotong.";
-
 // Parse an SSE (Server-Sent Events) stream and call onChunk for each data payload.
 const streamSse = async (response, onChunk) => {
   if (!response.ok) {
@@ -72,18 +70,6 @@ export default function AiChatbotScreen({ onClose }) {
   const [inputVal, setInputVal] = useState('');
   const chatEndRef = useRef(null);
 
-  // Read DeepSeek API Key (primary) and Gemini API Key (fallback) silently
-  const deepseekKey = (
-    import.meta.env.VITE_DEEPSEEK_API_KEY ||
-    localStorage.getItem('panganin_deepseek_key') || 
-    ''
-  ).trim();
-  const geminiKey = (
-    import.meta.env.VITE_GEMINI_API_KEY || 
-    localStorage.getItem('panganin_gemini_key') || 
-    ''
-  ).trim();
-
   // Scroll to bottom whenever messages list changes
   useEffect(() => {
     if (chatEndRef.current) {
@@ -133,71 +119,6 @@ export default function AiChatbotScreen({ onClose }) {
     ]);
     setInputVal('');
 
-    if (!deepseekKey && !geminiKey) {
-      // Fallback to offline rule silently if no API key is set
-      setTimeout(() => {
-        handleOfflineReply(text, loadingId);
-      }, 1000);
-      return;
-    }
-
-    // Try DeepSeek first (primary), then Gemini (fallback), then offline as last resort
-    const callDeepSeek = async (onChunk) => {
-      const response = await fetch('https://api.deepseek.com/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${deepseekKey}`
-        },
-        body: JSON.stringify({
-          model: 'deepseek-chat',
-          messages: [
-            { role: 'system', content: SYSTEM_PROMPT },
-            { role: 'user', content: text }
-          ],
-          temperature: 0.7,
-          max_tokens: 8192,
-          stream: true
-        })
-      });
-
-      await streamSse(response, (json) => {
-        const delta = json.choices && json.choices[0] && json.choices[0].delta;
-        if (delta && delta.content) {
-          onChunk(delta.content);
-        }
-      });
-    };
-
-    const callGemini = async (onChunk) => {
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:streamGenerateContent?alt=sse&key=${geminiKey}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          contents: [
-            { role: "user", parts: [{ text }] }
-          ],
-          systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
-          generationConfig: {
-            temperature: 0.7,
-            maxOutputTokens: 8192,
-            thinkingConfig: { thinkingBudget: 0 }
-          }
-        })
-      });
-
-      await streamSse(response, (json) => {
-        const chunk = json.candidates?.[0]?.content?.parts?.[0]?.text;
-        if (chunk) {
-          onChunk(chunk);
-        } else if (json.error) {
-          throw new Error(json.error.message || "Koneksi API ditolak oleh server Gemini.");
-        }
-      });
-    };
-
     const updateStreaming = (chunk) => {
       setMessages(prev => prev.map(m => m.id === loadingId ? {
         ...m,
@@ -211,56 +132,26 @@ export default function AiChatbotScreen({ onClose }) {
       setMessages(prev => prev.map(m => m.id === loadingId ? { ...m, isStreaming: false } : m));
     };
 
-    const errors = [];
+    // Call the serverless API. API keys live only on the server (Vercel Function),
+    // so the browser never sees them.
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text })
+      });
 
-    // 1) Try DeepSeek first when key is available
-    if (deepseekKey) {
-      let streamedAny = false;
-      try {
-        await callDeepSeek((chunk) => {
-          streamedAny = true;
-          updateStreaming(chunk);
-        });
-        markDone();
-        return;
-      } catch (err) {
-        // If DeepSeek already produced partial text, keep it instead of switching
-        if (streamedAny) {
-          console.error("DeepSeek stream interrupted after partial response:", err);
-          markDone();
-          return;
+      await streamSse(response, (json) => {
+        if (json.chunk) {
+          updateStreaming(json.chunk);
         }
-        console.error("DeepSeek API failed, switching to Gemini fallback:", err);
-        errors.push(`DeepSeek: ${err.message}`);
-      }
+      });
+      markDone();
+    } catch (err) {
+      console.error("Chat API failed:", err);
+      // Last resort: offline rule-based reply
+      handleOfflineReply(text, loadingId);
     }
-
-    // 2) Try Gemini as fallback when DeepSeek missing or failed
-    if (geminiKey) {
-      let streamedAny = false;
-      try {
-        await callGemini((chunk) => {
-          streamedAny = true;
-          updateStreaming(chunk);
-        });
-        markDone();
-        return;
-      } catch (err) {
-        if (streamedAny) {
-          console.error("Gemini stream interrupted after partial response:", err);
-          markDone();
-          return;
-        }
-        console.error("Gemini API fallback also failed:", err);
-        errors.push(`Gemini: ${err.message}`);
-      }
-    }
-
-    // 3) Last resort: offline rule-based reply
-    if (errors.length > 0) {
-      console.warn("Both DeepSeek & Gemini failed. Using offline reply. Reasons:", errors);
-    }
-    handleOfflineReply(text, loadingId);
   };
 
   const handleKeyPress = (e) => {
