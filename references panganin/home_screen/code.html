@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Food Delivery App - Home</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            app: {
+              green: '#338100',
+              lightGreen: '#459712',
+              bg: '#F9FAFB',
+              text: '#1F2937',
+              gray: '#6B7280',
+              lightGray: '#F3F4F6',
+              brown: '#9CA3AF'
+            }
+          },
+          fontFamily: {
+            serif: ['Georgia', 'serif'],
+            sans: ['system-ui', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+<style data-purpose="custom-utilities">
+    /* Hide scrollbar for horizontal scrolling */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;  /* IE and Edge */
+      scrollbar-width: none;  /* Firefox */
+    }
+  </style>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+</head>
+<body class="bg-app-bg text-app-text font-sans antialiased max-w-md mx-auto min-h-screen relative pb-24">
+<!-- BEGIN: Header Section -->
+<header class="pt-12 px-6 pb-2" data-purpose="app-header">
+<div class="flex items-center justify-between mb-4">
+<!-- Status bar placeholder space -->
+</div>
+<h1 class="text-3xl font-serif font-bold text-gray-900 leading-tight">
+      Good <span class="text-app-green">morning!</span>
+</h1>
+<div class="flex items-center mt-2 text-sm text-gray-700 font-medium">
+<i class="fa-solid fa-location-dot text-app-green mr-2"></i>
+<span>Jakarta, Indonesia</span>
+<i class="fa-solid fa-chevron-down ml-1 text-xs text-gray-500"></i>
+</div>
+</header>
+<!-- END: Header Section -->
+<!-- BEGIN: Main Content Section -->
+<main data-purpose="main-content">
+<!-- Hero Image Area -->
+<section class="px-6 mb-6 relative z-0">
+<div class="w-full h-40 rounded-2xl overflow-hidden shadow-sm relative">
+<img alt="Featured Healthy Food" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCqBkX7Wx-re9ZCocCsf8pePlHWH7nuKGi6-QBvNWLH7pg1MGvxIBhrn9sdCjI7x6SOQxiV8vcXeri8gLlf2j8JWLx-N8yyts9mgBdB6ryjuW_2IzJ2sk9zpswgRZhjqurLfpUTulWOvBXEVop2z_sFXtQtMSXcU5VdlvMDFBuDpn4Egf0xvlqPq7DQHUgNNnJijXONEFffXS4VNRj6YtDsKXFqCPdrbUOcY3fer04DFt4VPE9EGggt"/>
+<!-- Gradient overlay at bottom for blending if needed -->
+<div class="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-white to-transparent"></div>
+</div>
+</section>
+<!-- BEGIN: Search Bar -->
+<section class="px-6 mb-8 relative z-10 -mt-10" data-purpose="search-section">
+<div class="bg-white rounded-full shadow-md p-2 flex items-center">
+<input class="flex-grow bg-transparent border-none focus:ring-0 text-sm px-4 py-2 text-gray-700 placeholder-gray-400" placeholder="Search food or items..." type="text"/>
+<button class="bg-app-green text-white p-3 rounded-full w-10 h-10 flex items-center justify-center hover:bg-app-lightGreen transition-colors">
+<i class="fa-solid fa-magnifying-glass"></i>
+</button>
+</div>
+</section>
+<!-- END: Search Bar -->
+<!-- BEGIN: My Meal Plans -->
+<section class="px-6 mb-8" data-purpose="meal-plans-section">
+<div class="flex justify-between items-end mb-4">
+<h2 class="text-lg font-bold text-gray-900 font-serif">My meal plans</h2>
+<a class="text-sm text-app-green font-medium" href="#">View all</a>
+</div>
+<div class="bg-white rounded-3xl p-4 shadow-sm flex gap-4 items-center">
+<!-- Thumbnail -->
+<div class="w-24 h-24 rounded-2xl overflow-hidden shrink-0">
+<img alt="Herbs Crust Salmon" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCO7b3Ziznbz9hvz4Ck2SCS6036HPJn06zL_Y6LFGzWBF_s2dNL05NzhQCg15MHohPKKSXSVtMtoUJ1s1eiVMhGmKVrzFBHlViw2yU4sfh2LTzRpQkmL2WowfEXGvzxbkSt-lBFJLtxkwMfJCnKMhFevZwgRrs9mYE7KtrJUPAqI1jyQ11YBujT3Yn6okZJIWY8Dx6Uhg_81QffP-t9qPgaZG5qL0XlAEDJFx7-3NQFz6hgPUFxgozi"/>
+</div>
+<!-- Info -->
+<div class="flex-grow">
+<div class="flex gap-2 mb-2">
+<span class="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-orange-50 text-orange-800 text-[10px] font-bold uppercase tracking-wide">
+<i class="fa-solid fa-mug-saucer"></i> Breakfast
+            </span>
+<span class="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-gray-50 text-gray-700 text-[10px] font-bold">
+<i class="fa-solid fa-fire text-orange-500"></i> 125 Kcal
+            </span>
+</div>
+<h3 class="font-serif font-bold text-gray-900 text-base mb-1">Herbs Crust Salmon</h3>
+<p class="text-xs text-gray-500 line-clamp-1 mb-2">Salmon serve with roasted root and...</p>
+<div class="flex items-center gap-2 text-[10px] text-app-green font-medium">
+<i class="fa-solid fa-truck-fast"></i>
+<span>Driver on it's way to your home</span>
+</div>
+</div>
+</div>
+</section>
+<!-- END: My Meal Plans -->
+<!-- BEGIN: Food Categories -->
+<section class="px-6 mb-8" data-purpose="categories-section">
+<div class="flex justify-between items-end mb-4">
+<h2 class="text-lg font-bold text-gray-900 font-serif">Food categories</h2>
+<a class="text-sm text-app-green font-medium" href="#">View all</a>
+</div>
+<div class="flex gap-4 overflow-x-auto no-scrollbar pb-2">
+<!-- Category Item 1 -->
+<div class="flex flex-col items-center gap-2 min-w-[72px]">
+<div class="w-16 h-16 rounded-full overflow-hidden border-2 border-transparent hover:border-app-green transition-colors cursor-pointer shadow-sm">
+<img alt="Vegetables" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD4XLqOOAt3I36IVp7wsdn4kiIJijwRY4TaqXa6IWAQtBXV-0FQlkxQg67WgIv1tqWq86K9krTJXkcSLPx3RZhN4g4HfSWA2cL2G8ZMvXGItcz1WWNY9zOUdaoQANMYGlZ1rv8nbQalqFM-cJBn0Wdq9xY96ko-g5ZWN7OD4wQRtckmVHGLqFNjpvmJCfaYQK39LMHMM4P5MkWoaWehKUEY1h3AJPUNfRtTs9xOqoKcww7qzhcboCSn"/>
+</div>
+<span class="text-xs font-serif font-bold text-gray-800">Vegetables</span>
+</div>
+<!-- Category Item 2 -->
+<div class="flex flex-col items-center gap-2 min-w-[72px]">
+<div class="w-16 h-16 rounded-full overflow-hidden border-2 border-transparent hover:border-app-green transition-colors cursor-pointer shadow-sm">
+<img alt="Nuts &amp; Seed" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCGAO7tAnqF9E5kBdXaUAd3iIG9-DmjBp0EP_0JCU4AWCHHY0YnCjlJz3ywVYv5h3I4VkwA9uisaeGS-FMo5MXL0F9jOqe4St_gmKD1dBWchSJEdpLfMUoAWwLmmFruHCkp6gnuasUJZcaliLVQGQoXbYHsE1bDB0Rx2T9FEthoNiOnGQcPgVA_zBhBFhJXuZ7afbF7M3rEsk_Mv5SnZB77u0Br-2mVoMBd-HGNWJn35Icb88fQmDde"/>
+</div>
+<span class="text-xs font-serif font-bold text-gray-800">Nuts &amp; Seed</span>
+</div>
+<!-- Category Item 3 -->
+<div class="flex flex-col items-center gap-2 min-w-[72px]">
+<div class="w-16 h-16 rounded-full overflow-hidden border-2 border-transparent hover:border-app-green transition-colors cursor-pointer shadow-sm">
+<img alt="Protein" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6ItAsny8__R9_qlEg7mp8fvnMEvDf8K9IGMc3JmalQ9HIwEEkQ9coyMHzaKlztnnnyBGkiezD-ua3YynEtDSsUGj272tKRewu8l29IP6XTNj8O8aM4OPXDcphG4TZYLADwqYlJYr7z8YLzMjdpqcbev8xefEWTqnNXY63A19-un_LfnbgW9v-OdtM-Z6vghGlKou417VGPVQA7V6XsylE-3RnLE3AQydVb8u7Fu4UTO4bWlCNBX6s"/>
+</div>
+<span class="text-xs font-serif font-bold text-gray-800">Protein</span>
+</div>
+<!-- Category Item 4 -->
+<div class="flex flex-col items-center gap-2 min-w-[72px]">
+<div class="w-16 h-16 rounded-full overflow-hidden border-2 border-transparent hover:border-app-green transition-colors cursor-pointer shadow-sm">
+<img alt="Low Fats" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCd-_df0r7jmNG_5qrOvPoRreNb-n-9MxaLG5TYOKXP4ip8yUMY-3BrmDUvn-IW0meXK-nYubRUkZ_7Ofvx-RdbEllINXjVHt6o7-wqiCuiBm47yaehrURK3TYdoGo3SdqNxb3r1hVb_GzFjyTX46gGJnVVGKdWHL0jVKALI3Nb18tiLVlBuqn8W2_7LSGED9A0OOAKUZoQUVD35x1o6h4uz-J7PFnmIBfE5g-sUeFzscpkjTpzeBW9"/>
+</div>
+<span class="text-xs font-serif font-bold text-gray-800">Low Fats</span>
+</div>
+</div>
+</section>
+<!-- END: Food Categories -->
+</main>
+<!-- END: Main Content Section -->
+<!-- BEGIN: Bottom Navigation -->
+<nav class="fixed bottom-0 w-full max-w-md mx-auto bg-white border-t border-gray-100 px-6 py-4 rounded-t-[32px] shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.1)] z-50" data-purpose="bottom-nav">
+<ul class="flex justify-between items-center">
+<li class="flex flex-col items-center gap-1 text-app-green cursor-pointer">
+<i class="fa-solid fa-house text-xl"></i>
+<span class="text-[10px] font-medium">Home</span>
+<!-- Active indicator -->
+<div class="w-5 h-1 bg-gray-300 rounded-full mt-1"></div>
+</li>
+<li class="flex flex-col items-center gap-1 text-gray-400 hover:text-app-green transition-colors cursor-pointer">
+<i class="fa-solid fa-compass text-xl"></i>
+<span class="text-[10px] font-medium">Discover</span>
+</li>
+<li class="flex flex-col items-center gap-1 text-gray-400 hover:text-app-green transition-colors cursor-pointer">
+<i class="fa-solid fa-bag-shopping text-xl"></i>
+<span class="text-[10px] font-medium">Cart</span>
+</li>
+<li class="flex flex-col items-center gap-1 text-gray-400 hover:text-app-green transition-colors cursor-pointer">
+<i class="fa-regular fa-user text-xl"></i>
+<span class="text-[10px] font-medium">Profile</span>
+</li>
+</ul>
+<!-- iOS Home Indicator Space -->
+<div class="w-32 h-1 bg-gray-300 rounded-full mx-auto mt-4 mb-2"></div>
+</nav>
+<!-- END: Bottom Navigation -->
+</body></html>

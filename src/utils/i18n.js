@@ -6,6 +6,15 @@ export const translations = {
     navHaccp: "HACCP Scan",
     navLedger: "Ledger BC",
     
+    // Welcome Screen
+    welcomeHeadlineMain: "Discovering",
+    welcomeHeadlineGreen: "Fresh,",
+    welcomeHeadlineMid: "Local,",
+    welcomeHeadlineBrown: "Organic Food",
+    welcomeSignInBtn: "Sign in",
+    welcomeNoAccount: "Don't have an account?",
+    welcomeSignUpNow: "sign up now",
+    
     // TopHeader
     brandTitle: "PANGANIN",
     brandSub: "PANGAN AMAN & TERINTEGRASI",
@@ -105,6 +114,15 @@ export const translations = {
     navPlanner: "Portion AI",
     navHaccp: "HACCP Scan",
     navLedger: "Ledger BC",
+    
+    // Welcome Screen
+    welcomeHeadlineMain: "Discovering",
+    welcomeHeadlineGreen: "Fresh,",
+    welcomeHeadlineMid: "Local,",
+    welcomeHeadlineBrown: "Organic Food",
+    welcomeSignInBtn: "Sign in",
+    welcomeNoAccount: "Don't have an account?",
+    welcomeSignUpNow: "sign up now",
     
     // TopHeader
     brandTitle: "PANGANIN",

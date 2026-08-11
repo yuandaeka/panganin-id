@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>See Eat! - Welcome Screen</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<style data-purpose="typography">
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=Inter:wght@400;500;600&display=swap');
+    
+    .font-serif {
+      font-family: 'Playfair Display', serif;
+    }
+    .font-sans {
+      font-family: 'Inter', sans-serif;
+    }
+    .text-brand-green {
+      color: #3b8221;
+    }
+    .text-brand-brown {
+      color: #8a735c;
+    }
+    .bg-brand-green-gradient {
+      background: linear-gradient(90deg, #327514 0%, #7dbd3e 100%);
+    }
+  </style>
+<style data-purpose="layout">
+    /* Custom utility for the faded image effect */
+    .image-fade-bottom {
+      -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+      mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+    }
+  </style>
+</head>
+<body class="bg-[#fcfcfa] h-screen w-full flex justify-center items-center font-sans antialiased">
+<!-- BEGIN: Mobile Container -->
+<!-- Simulating a mobile device screen for presentation -->
+<main class="relative w-full h-full max-w-[400px] max-h-[850px] bg-[#fdfdfc] sm:rounded-[40px] sm:shadow-2xl sm:border-[8px] sm:border-gray-900 overflow-hidden flex flex-col justify-between">
+<!-- Top section with Image and Logo -->
+<div class="relative h-[55%] w-full">
+<!-- Status Bar Area (Simulated) -->
+<div class="absolute top-0 left-0 w-full p-4 flex justify-between items-center z-20 text-black">
+<span class="text-sm font-semibold pl-2">9:41</span>
+<div class="flex space-x-1.5 pr-2 items-center">
+<!-- Cellular Icon -->
+<svg class="w-4 h-4" fill="currentColor" viewbox="0 0 24 24"><path d="M21 4h-2v16h2V4zm-4 5h-2v11h2V9zm-4 4h-2v7h2v-7zm-4 4H7v3h2v-3z"></path></svg>
+<!-- Wifi Icon -->
+<svg class="w-4 h-4" fill="currentColor" viewbox="0 0 24 24"><path d="M12.01 21.49L23.64 7c-3.45-3.19-8.84-5.12-11.62-5.12-2.78 0-8.18 1.93-11.64 5.12l11.63 14.49zm0 0"></path></svg>
+<!-- Battery Icon -->
+<svg class="w-5 h-5" fill="currentColor" viewbox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"></path></svg>
+</div>
+</div>
+<!-- Hero Image with bottom fade -->
+<div class="absolute inset-0 w-full h-full overflow-hidden">
+<!-- We use a placeholder since the specific cut-out salad image isn't a direct URL -->
+<img alt="Fresh Salad" class="w-full h-full object-cover object-center image-fade-bottom opacity-90" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBO5N-CJ8i6uIuTzpN7ltHo_-tpTM-Bb5jeI3SkCxatq5grxuL34lh92YRfyfTvg08h1xccnMTGl5CPD3iaayukiAjj359TjX6aCPKRoZI1Min-RP4xBkeQrSQeHhoaYj5qpYhLZhmPHknRRF8crZoE-CAi9Ejmxzcq1lHdpqevd4n10CKf-yLEnZndSpqaVkwjeXtE8ARQUEiWWDJk2uh6oN8B83sLGUHaE6xrD8gvkpKIoPtl_0RU"/>
+</div>
+<!-- Logo -->
+<div class="absolute top-[12%] left-0 w-full flex justify-center z-10">
+<div class="text-center font-serif leading-none tracking-tight">
+<h1 class="text-3xl font-black text-gray-900">See<span class="text-brand-green text-lg align-top ml-0.5">••</span></h1>
+<h1 class="text-3xl font-black text-gray-900 -mt-1 ml-6">Eat!</h1>
+</div>
+</div>
+</div>
+<!-- Bottom section with Text and Actions -->
+<div class="flex-1 flex flex-col justify-end px-8 pb-10 z-10 relative bg-gradient-to-t from-[#fcfcfa] via-[#fcfcfa] to-transparent pt-10">
+<!-- Headline Text -->
+<div class="text-center mb-10 relative">
+<h2 class="font-serif text-[40px] leading-[1.1] font-extrabold text-gray-900 tracking-tight">
+          Discovering <br/>
+<span class="text-brand-green italic font-medium">Fresh,</span> Local, <br/>
+          Organic <span class="text-brand-brown">Food</span>
+</h2>
+<!-- Decorative scribble under 'Food' -->
+<div class="absolute -bottom-4 left-1/2 -translate-x-1/2 w-48 h-4">
+<svg class="w-full h-full opacity-80" fill="none" stroke="#8a735c" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 180 20">
+<path d="M10,10 Q50,0 90,12 T170,8"></path>
+</svg>
+</div>
+</div>
+<!-- Call to Action Buttons -->
+<div class="w-full space-y-5">
+<!-- Sign In Button -->
+<button class="w-full bg-brand-green-gradient text-white rounded-full py-4 text-base font-semibold shadow-[0_8px_20px_rgba(125,189,62,0.3)] transition-transform hover:scale-[1.02] active:scale-95">
+          Sign in
+        </button>
+<!-- Sign Up Link -->
+<p class="text-center text-sm text-gray-500 font-medium">
+          Don't have an account? 
+          <a class="text-brand-green font-bold hover:underline" href="#">sign up now</a>
+</p>
+</div>
+<!-- Home Indicator (Simulated iOS) -->
+<div class="absolute bottom-2 left-1/2 -translate-x-1/2 w-1/3 h-1 bg-gray-300 rounded-full"></div>
+</div>
+</main>
+<!-- END: Mobile Container -->
+</body></html>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import WelcomeScreen from './components/WelcomeScreen';
 import Navbar from './components/Navbar';
 import TopHeader from './components/TopHeader';
 import HomeScreen from './components/HomeScreen';
@@ -13,7 +14,7 @@ import ProfileScreen from './components/ProfileScreen';
 import './App.css';
 
 export default function App() {
-  const [activePage, setActivePage] = useState('home');
+  const [activePage, setActivePage] = useState('welcome');
   const [darkMode, setDarkMode] = useState(false);
   const [profile, setProfile] = useState({
     name: "Chef Amir",
@@ -75,8 +76,8 @@ export default function App() {
       {/* MAIN INTERACTIVE HUB (Locked to Viewport Height to prevent body scroll) */}
       <main className="h-screen max-w-md w-full bg-white dark:bg-slate-900 shadow-xl shadow-slate-100 dark:shadow-slate-950/20 flex flex-col relative overflow-hidden">
         
-        {/* Top brand header, hidden on chatbot screen */}
-        {activePage !== 'chatbot' && (
+        {/* Top brand header, hidden on welcome and chatbot screens */}
+        {activePage !== 'chatbot' && activePage !== 'welcome' && (
           <TopHeader 
             userInitials={profile.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()}
             userImage={profile.image}
@@ -89,7 +90,7 @@ export default function App() {
         )}
 
         {/* Notification Banner Toast (Absolute position below TopHeader) */}
-        {showToast && (
+        {showToast && activePage !== 'welcome' && (
           <div 
             id="notification-toast" 
             className="mx-4 bg-emerald-800 text-white p-3 rounded-2xl flex items-start gap-2.5 shadow-lg animate-bounce z-40 absolute top-20 inset-x-0"
@@ -110,7 +111,9 @@ export default function App() {
         )}
 
         {/* Main Content Area */}
-        {activePage !== 'chatbot' ? (
+        {activePage === 'welcome' ? (
+          <WelcomeScreen onStart={() => setActivePage('home')} />
+        ) : activePage !== 'chatbot' ? (
           <div className="flex-1 overflow-y-auto relative pb-28 pt-1">
             {activePage === 'home' && (
               <HomeScreen onSwitchTab={setActivePage} onSelectArticle={setSelectedArticle} profileName={profile.name} />
@@ -176,7 +179,9 @@ export default function App() {
         )}
 
         {/* FIXED BOTTOM NAVIGATION BAR */}
-        <Navbar activePage={activePage} setActivePage={setActivePage} />
+        {activePage !== 'welcome' && (
+          <Navbar activePage={activePage} setActivePage={setActivePage} />
+        )}
       </main>
 
     </div>

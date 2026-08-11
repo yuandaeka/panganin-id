@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Product Detail</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<style data-purpose="custom-fonts">
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600&display=swap');
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    .font-serif {
+      font-family: 'Playfair Display', serif;
+    }
+  </style>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              light: '#f2f8eb',
+              DEFAULT: '#4a891f',
+              dark: '#2c5912',
+            },
+            neutral: {
+              50: '#fafafa',
+              100: '#f5f5f5',
+              200: '#e5e5e5',
+              800: '#262626',
+              900: '#171717',
+            }
+          },
+          borderRadius: {
+            '4xl': '2rem',
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+<!-- Mobile Container -->
+<div class="bg-white w-full max-w-[400px] min-h-screen relative overflow-hidden shadow-2xl pb-24">
+<!-- BEGIN: Header Section -->
+<header class="relative h-[350px]">
+<!-- Back Button -->
+<button class="absolute top-12 left-4 z-10 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md text-gray-800">
+<i class="fa-solid fa-arrow-left"></i>
+</button>
+<!-- Main Image -->
+<img alt="Herbs Crust Salmon" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCD1URHaxrcnYVs1NrVLabmU95EpulSJnXGZOTFBb9xabiOme0JPPcfQKK5EhsyQCcjMQF-8nGJA4PW2QcITfQl1tPxaCUDSwNsZrrwIizU98rkyVP6r-iQhoTB_thBH25a2AySGdmhKFWyTqjOfNIXyn5xkGAEKStlK5sLI8p0KVm7UR-JKW5eP0Cq7MMk2JW1OBRGKydZUb7cQkA_xrVVmhMlnQsAL91q6JTlZ9NasWr_mdunZPdq"/>
+</header>
+<!-- END: Header Section -->
+<!-- BEGIN: Product Details Section -->
+<main class="relative -mt-10 bg-white rounded-t-4xl px-6 pt-8 pb-4">
+<!-- Drag Handle Indicator -->
+<div class="absolute top-3 left-1/2 -translate-x-1/2 w-12 h-1.5 bg-gray-300 rounded-full"></div>
+<!-- Tag -->
+<div class="flex justify-center mb-4">
+<span class="bg-orange-50 text-orange-800 text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-2">
+<i class="fa-solid fa-mug-hot text-orange-600 text-[10px]"></i> BREAKFAST
+        </span>
+</div>
+<!-- Title -->
+<h1 class="text-3xl font-serif text-center text-gray-900 mb-3">Herbs Crust Salmon</h1>
+<!-- Description -->
+<p class="text-gray-500 text-sm text-center leading-relaxed mb-2">
+        Herb-crusted salmon is a dish that consists of a salmon fillet coated with a mixture of herbs and breadcrumbs...
+      </p>
+<!-- Read More Link -->
+<div class="text-center mb-8">
+<a class="text-brand text-sm font-semibold hover:underline" href="#">Read more</a>
+</div>
+<!-- Informations Header -->
+<h2 class="text-lg font-serif text-gray-900 mb-5">Informations</h2>
+<!-- Nutritional Grid -->
+<div class="grid grid-cols-2 gap-y-6 gap-x-4">
+<!-- Calories -->
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center text-orange-500">
+<i class="fa-solid fa-fire text-lg"></i>
+</div>
+<div>
+<p class="text-sm font-semibold text-gray-900">125 Kcal</p>
+</div>
+</div>
+<!-- Proteins -->
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center text-pink-500">
+<i class="fa-solid fa-drumstick-bite text-lg"></i>
+</div>
+<div>
+<p class="text-sm font-semibold text-gray-900">24g Proteins</p>
+</div>
+</div>
+<!-- Carbs -->
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-brand-light flex items-center justify-center text-brand">
+<i class="fa-solid fa-wheat-awn text-lg"></i>
+</div>
+<div>
+<p class="text-sm font-semibold text-gray-900">125g Carbs</p>
+</div>
+</div>
+<!-- Fats -->
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center text-purple-500">
+<i class="fa-solid fa-droplet text-lg"></i>
+</div>
+<div>
+<p class="text-sm font-semibold text-gray-900">75g Fats</p>
+</div>
+</div>
+</div>
+</main>
+<!-- END: Product Details Section -->
+<!-- BEGIN: Sticky Footer -->
+<footer class="fixed bottom-0 w-full max-w-[400px] bg-black p-4 pb-8 rounded-t-3xl">
+<div class="flex items-center justify-between gap-4">
+<!-- Quantity Selector -->
+<div class="flex items-center gap-4 text-white">
+<button class="w-8 h-8 bg-white text-black rounded-full flex items-center justify-center">
+<i class="fa-solid fa-minus text-sm"></i>
+</button>
+<span class="font-semibold text-lg">1</span>
+<button class="w-8 h-8 bg-white text-black rounded-full flex items-center justify-center">
+<i class="fa-solid fa-plus text-sm"></i>
+</button>
+</div>
+<!-- Add to Cart Button -->
+<button class="flex-1 bg-gradient-to-r from-brand to-lime-400 text-white font-semibold py-4 rounded-2xl shadow-lg hover:opacity-90 transition-opacity">
+          Add to cart
+        </button>
+</div>
+</footer>
+<!-- END: Sticky Footer -->
+</div>
+</body></html>

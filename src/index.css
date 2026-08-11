@@ -95,3 +95,26 @@ body {
 .rise-in {
   animation: riseIn 0.4s ease both;
 }
+
+/* Welcome Screen Custom Utilities */
+.font-serif-welcome {
+  font-family: 'Playfair Display', Georgia, serif;
+}
+
+.text-brand-green {
+  color: #327514;
+}
+
+.text-brand-brown {
+  color: #8a735c;
+}
+
+.bg-brand-green-gradient {
+  background: linear-gradient(90deg, #327514 0%, #7dbd3e 100%);
+}
+
+.image-fade-bottom {
+  -webkit-mask-image: linear-gradient(to bottom, black 45%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 45%, transparent 100%);
+}
+
