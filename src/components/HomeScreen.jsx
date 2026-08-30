@@ -34,22 +34,23 @@ export default function HomeScreen({ onSwitchTab, onSelectArticle, profileName =
         </div>
       </div>
 
-      {/* Hero Image Banner (Reference style) */}
+      {/* Hero News & Education Carousel (Interactive Swipeable Slider) */}
       <section className="relative z-0">
-        <div className="w-full h-44 rounded-3xl overflow-hidden shadow-sm relative border border-slate-100 dark:border-slate-800">
-          <img
-            alt="Featured Healthy Food"
-            className="w-full h-full object-cover"
-            src="https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&q=80&w=800"
-          />
-          {/* Subtle bottom gradient overlay */}
-          <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-slate-900/40 to-transparent pointer-events-none"></div>
-        </div>
+        <EducationCarousel
+          onViewAll={() => {
+            if (onSelectArticle) onSelectArticle(null);
+            onSwitchTab('news');
+          }}
+          onSelectArticle={(article) => {
+            if (onSelectArticle) onSelectArticle(article);
+            onSwitchTab('news');
+          }}
+        />
       </section>
 
-      {/* Search Bar (-mt-10 pill overlap, Reference style) */}
-      <section className="relative z-10 -mt-10">
-        <div className="bg-white dark:bg-slate-800 rounded-full shadow-lg p-1.5 flex items-center border border-slate-100 dark:border-slate-700/80">
+      {/* Global Search Bar */}
+      <section className="relative z-10">
+        <div className="bg-white dark:bg-slate-800 rounded-full shadow-sm p-1.5 flex items-center border border-slate-200/80 dark:border-slate-700/80">
           <input
             type="text"
             placeholder={t('searchPlaceholder')}
@@ -61,7 +62,7 @@ export default function HomeScreen({ onSwitchTab, onSelectArticle, profileName =
         </div>
       </section>
 
-      {/* My Meal Plans Section (Reference layout with Panganin data) */}
+      {/* My Meal Plans Section (Reference layout with Panganify data) */}
       <section className="space-y-3">
         <div className="flex justify-between items-end">
           <h3 className="font-serif-welcome text-lg font-bold text-slate-900 dark:text-white">My meal plans</h3>
@@ -123,7 +124,7 @@ export default function HomeScreen({ onSwitchTab, onSelectArticle, profileName =
         </div>
       </section>
 
-      {/* PANGANIN Core Features Quick Access Grid (Layanan Utama Panganin) */}
+      {/* PANGANIFY Core Features Quick Access Grid (Layanan Utama Panganify) */}
       <div className="space-y-3 pt-2">
         <h3 className="font-serif-welcome text-base font-bold text-slate-900 dark:text-slate-100 tracking-wide">
           {t('layananUtama')}
@@ -200,20 +201,6 @@ export default function HomeScreen({ onSwitchTab, onSelectArticle, profileName =
           </div>
           <i className="fa-solid fa-chevron-right group-hover:translate-x-1 transition-all-300"></i>
         </button>
-      </div>
-
-      {/* Global Nutrition News & Global Cooking Tips (Edukasi Global) */}
-      <div className="pt-2">
-        <EducationCarousel
-          onViewAll={() => {
-            if (onSelectArticle) onSelectArticle(null);
-            onSwitchTab('news');
-          }}
-          onSelectArticle={(article) => {
-            if (onSelectArticle) onSelectArticle(article);
-            onSwitchTab('news');
-          }}
-        />
       </div>
     </section>
   );

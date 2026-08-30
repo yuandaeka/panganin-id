@@ -1,7 +1,7 @@
-# Design System & Architecture Specification: PANGANIN Mobile-First App
+# Design System & Architecture Specification: PANGANIFY Mobile-First App
 
 ## 1. Overview & UI/UX Philosophy
-PANGANIN (Pangan Aman dan Terintegrasi) dirancang dengan pendekatan **Mobile-First & Responsif**, mengadopsi estetika premium, bersih, dan berorientasi pada kartu (card-based layout) mirip dengan style *Foomly*. 
+PANGANIFY (Pangan Aman dan Terintegrasi) dirancang dengan pendekatan **Mobile-First & Responsif**, mengadopsi estetika premium, bersih, dan berorientasi pada kartu (card-based layout) mirip dengan style *Foomly*. 
 Aplikasi ini memprioritaskan jangkauan area jempol (Thumb Zone) untuk operasional dapur massal, pedagang, dan keluarga di lapangan.
 
 ## 2. Palet Warna & Tipografi
@@ -14,7 +14,7 @@ Aplikasi ini memprioritaskan jangkauan area jempol (Thumb Zone) untuk operasiona
 
 ### A. Bottom Navigation Bar (Sticky Custom Menu)
 - Terdiri dari 4 Tab: `Home`, `AI HACCP Scan`, `Blockchain Ledger`, dan `Profile`.
-- Di bagian tengah navigasi terintegrasi **Floating Action Button (FAB) berbentuk bulat warna Emerald** untuk membuka *Panganin AI Chatbot* secara instan via jendela *slide-up*.
+- Di bagian tengah navigasi terintegrasi **Floating Action Button (FAB) berbentuk bulat warna Emerald** untuk membuka *Panganify AI Chatbot* secara instan via jendela *slide-up*.
 
 ### B. AI Portion & Recipe Planner Component
 - **Pilihan Hidangan:** Dropdown menu yang wajib memiliki opsi kustom: `"✍️ Tulis Hidangan Sendiri (Input Manual)..."`.

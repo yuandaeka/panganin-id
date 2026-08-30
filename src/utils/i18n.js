@@ -16,7 +16,7 @@ export const translations = {
     welcomeSignUpNow: "sign up now",
     
     // TopHeader
-    brandTitle: "PANGANIN",
+    brandTitle: "PANGANIFY",
     brandSub: "PANGAN AMAN & TERINTEGRASI",
     notifTitle: "Transaksi Blockchain Terverifikasi",
     notifDesc: "Sisa limbah organik berhasil disalurkan ke CV EcoEnzym Surakarta.",
@@ -27,7 +27,7 @@ export const translations = {
     tagDapur: "Dapur MBG Solo",
     tagHaccp: "HACCP Certified",
     searchPlaceholder: "Cari resep porsi besar, petani lokal, info gizi...",
-    layananUtama: "Layanan Utama Panganin",
+    layananUtama: "Layanan Utama Panganify",
     cardPlannerTitle: "AI Portion Planner",
     cardPlannerDesc: "Estimasi porsi & resep massal",
     cardHaccpTitle: "AI HACCP Scanner",
@@ -125,7 +125,7 @@ export const translations = {
     welcomeSignUpNow: "sign up now",
     
     // TopHeader
-    brandTitle: "PANGANIN",
+    brandTitle: "PANGANIFY",
     brandSub: "SAFE & INTEGRATED FOOD SUPPLY",
     notifTitle: "Blockchain Transaction Verified",
     notifDesc: "Organic waste residue successfully distributed to CV EcoEnzym Surakarta.",
@@ -136,7 +136,7 @@ export const translations = {
     tagDapur: "Solo MBG Kitchen",
     tagHaccp: "HACCP Certified",
     searchPlaceholder: "Search mass recipes, local farmers, nutrition info...",
-    layananUtama: "Panganin Core Services",
+    layananUtama: "Panganify Core Services",
     cardPlannerTitle: "AI Portion Planner",
     cardPlannerDesc: "Estimations & mass recipes",
     cardHaccpTitle: "AI HACCP Scanner",

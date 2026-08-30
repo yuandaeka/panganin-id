@@ -64,7 +64,7 @@ export default function AiChatbotScreen({ onClose }) {
     {
       id: 1,
       sender: 'ai',
-      text: "Halo Chef! Saya **Panganin AI**. Saya siap membantu menjawab pertanyaan seputar standardisasi gizi, porsi makan besar, bahaya wadah (plastik/styrofoam), regulasi suhu, dan pengolahan limbah. Apa yang ingin Anda tanyakan hari ini?"
+      text: "Halo Chef! Saya **Panganify AI**. Saya siap membantu menjawab pertanyaan seputar standardisasi gizi, porsi makan besar, bahaya wadah (plastik/styrofoam), regulasi suhu, dan pengolahan limbah. Apa yang ingin Anda tanyakan hari ini?"
     }
   ]);
   const [inputVal, setInputVal] = useState('');
@@ -86,9 +86,9 @@ export default function AiChatbotScreen({ onClose }) {
     } else if (lowerQuery.includes('plastik') || lowerQuery.includes('kresek') || lowerQuery.includes('styrofoam') || lowerQuery.includes('wadah')) {
       reply = "Wadah non-foodgrade sangat berbahaya bagi kesehatan!\n\n* **Plastik Kresek Hitam**: Hasil daur ulang kotor. Panas memicu perpindahan logam berat & klorin.\n* **Styrofoam**: Mengandung zat residu karsinogenik (Benzena/Stirena). Sangat dilarang untuk kuah bersuhu >70°C.\n* **Rekomendasi**: Gunakan wadah plastik PP (Kode 5) atau kemasan serat tanaman (bagasse) biodegradable yang aman.";
     } else if (lowerQuery.includes('blockchain') || lowerQuery.includes('tani') || lowerQuery.includes('petani')) {
-      reply = "Sistem **PANGANIN Blockchain** mencatat data pasokan pangan langsung dari petani lokal tanpa perantara tengkulak. \n\nKeuntungannya: \n1. **Transparansi Harga**: Memastikan harga beli transparan di ledger digital guna mencegah korupsi atau manipulasi anggaran program gizi.\n2. **Rantai Pasok Kilat**: Menghubungkan logistik terdekat sehingga makanan lebih segar saat sampai ke dapur massal.";
+      reply = "Sistem **PANGANIFY Blockchain** mencatat data pasokan pangan langsung dari petani lokal tanpa perantara tengkulak. \n\nKeuntungannya: \n1. **Transparansi Harga**: Memastikan harga beli transparan di ledger digital guna mencegah korupsi atau manipulasi anggaran program gizi.\n2. **Rantai Pasok Kilat**: Menghubungkan logistik terdekat sehingga makanan lebih segar saat sampai ke dapur massal.";
     } else if (lowerQuery.includes('haccp')) {
-      reply = "Analisis **HACCP (Hazard Analysis Critical Control Point)** di Panganin melacak kebersihan dapur Anda. Anda bisa memoto meja produksi atau wadah penyajian, dan AI kami akan mengukur skor higienitas, potensi cemaran mikroba silang, serta memberikan checklist digital secara otomatis.";
+      reply = "Analisis **HACCP (Hazard Analysis Critical Control Point)** di Panganify melacak kebersihan dapur Anda. Anda bisa memoto meja produksi atau wadah penyajian, dan AI kami akan mengukur skor higienitas, potensi cemaran mikroba silang, serta memberikan checklist digital secara otomatis.";
     } else {
       reply = "Terima kasih atas pertanyaannya! Saya dapat memandu Anda untuk optimasi resep massal bergizi, mendeteksi bahaya wadah saji (styrofoam/kresek) dengan AI scanner, serta pencocokan petani lokal via blockchain. Silakan ketik pertanyaan yang lebih spesifik.";
     }
@@ -188,7 +188,7 @@ export default function AiChatbotScreen({ onClose }) {
             <i className="fa-solid fa-robot"></i>
           </div>
           <div>
-            <h3 className="font-display text-sm font-extrabold">Panganin AI Assistant</h3>
+            <h3 className="font-display text-sm font-extrabold">Panganify AI Assistant</h3>
             <p className="text-[9px] text-emerald-300 flex items-center gap-1.5 font-bold">
               <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-ping"></span> Ahli Gizi & HACCP Pintar
             </p>

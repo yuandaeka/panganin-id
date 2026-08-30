@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PANGANIN - Ekosistem Pangan Sosial berbasis AI & Blockchain</title>
+    <title>PANGANIFY - Ekosistem Pangan Sosial berbasis AI & Blockchain</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -69,7 +69,7 @@
                 </div>
                 <div>
                     <h1 class="text-xl font-extrabold tracking-tight text-emerald-800 flex items-center gap-1">
-                        PANGANIN <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-1.5 py-0.5 rounded-full">AI & BC</span>
+                        PANGANIFY <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-1.5 py-0.5 rounded-full">AI & BC</span>
                     </h1>
                     <p class="text-[10px] text-slate-500 font-medium tracking-wide">PANGAN AMAN & TERINTEGRASI</p>
                 </div>
@@ -123,9 +123,9 @@
                 <input type="text" placeholder="Cari resep porsi besar, petani lokal, info gizi..." class="w-full bg-slate-50 border border-slate-200/80 rounded-2xl py-3.5 pl-10 pr-4 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:bg-white transition-all-300">
             </div>
 
-            <!-- PANGANIN Core Features Quick Access Grid -->
+            <!-- PANGANIFY Core Features Quick Access Grid -->
             <div>
-                <h3 class="text-xs font-extrabold text-slate-400 tracking-wider uppercase mb-3">Layanan Utama Panganin</h3>
+                <h3 class="text-xs font-extrabold text-slate-400 tracking-wider uppercase mb-3">Layanan Utama Panganify</h3>
                 <div class="grid grid-cols-2 gap-3">
                     <!-- Nav Card 1: AI Portion Planner -->
                     <button onclick="switchTab('planner')" class="flex flex-col text-left p-3.5 bg-emerald-50/60 hover:bg-emerald-50 border border-emerald-100/50 rounded-2xl transition-all-300 group">
@@ -630,7 +630,7 @@
                         <i class="fa-solid fa-robot"></i>
                     </div>
                     <div>
-                        <h3 class="text-xs font-extrabold">Panganin AI Assistant</h3>
+                        <h3 class="text-xs font-extrabold">Panganify AI Assistant</h3>
                         <p class="text-[9px] text-emerald-300 flex items-center gap-1"><span class="w-1.5 h-1.5 bg-green-400 rounded-full animate-ping"></span> Ahli Gizi & HACCP Pintar</p>
                     </div>
                 </div>
@@ -645,7 +645,7 @@
                 <div class="flex items-start gap-2 max-w-[85%]">
                     <div class="w-6.5 h-6.5 bg-emerald-100 text-emerald-800 rounded-full flex items-center justify-center text-[10px] p-1.5">AI</div>
                     <div class="bg-white border border-slate-100 p-3 rounded-2xl rounded-tl-none shadow-sm">
-                        <p class="text-xs text-slate-800 leading-relaxed">Halo Chef! Saya **Panganin AI**. Saya siap membantu menjawab pertanyaan seputar standardisasi gizi, porsi makan besar, bahaya wadah (plastik/styrofoam), regulasi suhu, dan pengolahan limbah. Apa yang ingin Anda tanyakan hari ini?</p>
+                        <p class="text-xs text-slate-800 leading-relaxed">Halo Chef! Saya **Panganify AI**. Saya siap membantu menjawab pertanyaan seputar standardisasi gizi, porsi makan besar, bahaya wadah (plastik/styrofoam), regulasi suhu, dan pengolahan limbah. Apa yang ingin Anda tanyakan hari ini?</p>
                     </div>
                 </div>
 
@@ -676,7 +676,7 @@
 
     <!-- FOOTER / CREDIT OUTSIDE SIMULATOR VIEWPORT -->
     <footer class="bg-slate-900 border-t border-slate-800 text-slate-500 py-6 text-center text-xs mt-auto">
-        <p class="font-bold text-slate-400">PANGANIN © 2026</p>
+        <p class="font-bold text-slate-400">PANGANIFY © 2026</p>
         <p class="text-[10px] mt-1 max-w-md mx-auto px-4">Inovasi Ekosistem berbasis AI dan Blockchain untuk Ketahanan Pangan Sosial & Circular Economy.</p>
     </footer>
 
@@ -1055,7 +1055,7 @@
             }, 3000);
         }
 
-        // Interactive PANGANIN AI Chatbot simulator
+        // Interactive PANGANIFY AI Chatbot simulator
         function handleChatEnter(event) {
             if (event.key === 'Enter') {
                 sendMessageFromInput();
@@ -1110,9 +1110,9 @@
             } else if (lowerQuery.includes('plastik') || lowerQuery.includes('kresek') || lowerQuery.includes('styrofoam') || lowerQuery.includes('wadah')) {
                 reply = "Wadah non-foodgrade sangat berbahaya bagi kesehatan!\n\n* **Plastik Kresek Hitam**: Hasil daur ulang kotor. Panas memicu perpindahan logam berat & klorin.\n* **Styrofoam**: Mengandung zat residu karsinogenik (Benzena/Stirena). Sangat dilarang untuk kuah bersuhu >70°C.\n* **Rekomendasi**: Gunakan wadah plastik PP (Kode 5) atau kemasan serat tanaman (bagasse) biodegradable yang aman.";
             } else if (lowerQuery.includes('blockchain') || lowerQuery.includes('tani') || lowerQuery.includes('petani')) {
-                reply = "Sistem **PANGANIN Blockchain** mencatat data pasokan pangan langsung dari petani lokal tanpa perantara tengkulak. \n\nKeuntungannya: \n1. **Transparansi Harga**: Memastikan harga beli transparan di ledger digital guna mencegah korupsi atau manipulasi anggaran program gizi.\n2. **Rantai Pasok Kilat**: Menghubungkan logistik terdekat sehingga makanan lebih segar saat sampai ke dapur massal.";
+                reply = "Sistem **PANGANIFY Blockchain** mencatat data pasokan pangan langsung dari petani lokal tanpa perantara tengkulak. \n\nKeuntungannya: \n1. **Transparansi Harga**: Memastikan harga beli transparan di ledger digital guna mencegah korupsi atau manipulasi anggaran program gizi.\n2. **Rantai Pasok Kilat**: Menghubungkan logistik terdekat sehingga makanan lebih segar saat sampai ke dapur massal.";
             } else if (lowerQuery.includes('haccp')) {
-                reply = "Analisis **HACCP (Hazard Analysis Critical Control Point)** di Panganin melacak kebersihan dapur Anda. Anda bisa memoto meja produksi atau wadah penyajian, dan AI kami akan mengukur skor higienitas, potensi cemaran mikroba silang, serta memberikan checklist digital secara otomatis.";
+                reply = "Analisis **HACCP (Hazard Analysis Critical Control Point)** di Panganify melacak kebersihan dapur Anda. Anda bisa memoto meja produksi atau wadah penyajian, dan AI kami akan mengukur skor higienitas, potensi cemaran mikroba silang, serta memberikan checklist digital secara otomatis.";
             } else {
                 reply = "Terima kasih atas pertanyaannya! Saya dapat memandu Anda untuk optimasi resep massal bergizi, mendeteksi bahaya wadah saji (styrofoam/kresek) dengan AI scanner, serta pencocokan petani lokal via blockchain. Silakan ketik pertanyaan yang lebih spesifik.";
             }

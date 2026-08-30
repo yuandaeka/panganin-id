@@ -1,6 +1,6 @@
 # To-Do List & Implementation Roadmap for AI Agent
 
-Berikut adalah daftar tugas terstruktur untuk mengembangkan folder HTML PANGANIN yang sudah ada. Instruksikan AI Agent untuk menyelesaikan poin-poin ini secara bertahap:
+Berikut adalah daftar tugas terstruktur untuk mengembangkan folder HTML PANGANIFY yang sudah ada. Instruksikan AI Agent untuk menyelesaikan poin-poin ini secara bertahap:
 
 ## [Phase 1: Refactoring & Layout Adjustment]
 - [x] **Fix 1.1**: Periksa struktur file HTML utama, pastikan bagian *Edukasi Global & Berita Gizi* sudah berada di urutan paling bawah halaman Beranda (di bawah modul Jadwal Menu MBG).
@@ -15,7 +15,7 @@ Berikut adalah daftar tugas terstruktur untuk mengembangkan folder HTML PANGANIN
 ## [Phase 3: Interactive Simulations & State Management]
 - [x] **Task 3.1**: Sempurnakan fungsi simulator kamera HACCP. Pastikan transisi perpindahan dari deteksi wadah berbahaya (styrofoam/kresek seblak) ke wadah aman berjalan lancar saat disimulasikan (klik tombol ganti objek).
 - [x] **Task 3.2**: Sambungkan input jumlah porsi (slider/range input) agar secara langsung mengubah angka estimasi berat bahan baku (Beras, Ayam, Bawang) secara proporsional lewat JavaScript math perkalian dasar.
-- [x] **Task 3.3**: Pastikan jendela *Panganin AI Chatbot* dapat melakukan *toggle slide-up* dan *slide-down* dengan mulus tanpa merusak susunan Bottom Navigation Bar.
+- [x] **Task 3.3**: Pastikan jendela *Panganify AI Chatbot* dapat melakukan *toggle slide-up* dan *slide-down* dengan mulus tanpa merusak susunan Bottom Navigation Bar.
 
 ## [Phase 4: Responsive Verification]
 - [x] **Test 4.1**: Hapus frame pembatas HP statis jika masih ada. Gunakan utility responsive Tailwind (`sm:`, `md:`, `lg:`) agar layout melebar secara alami di desktop menjadi tampilan multi-kolom yang rapi.

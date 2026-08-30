@@ -18,7 +18,7 @@ export default function App() {
   const [darkMode, setDarkMode] = useState(false);
   const [profile, setProfile] = useState({
     name: "Chef Amir",
-    email: "amir.kitchen@panganin.id",
+    email: "amir.kitchen@panganify.id",
     phone: "+62 812-3456-7890",
     dapur: "Dapur MBG Solo",
     image: null,

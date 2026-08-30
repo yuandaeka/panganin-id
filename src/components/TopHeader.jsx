@@ -11,7 +11,7 @@ export default function TopHeader({ onNotificationToggle, userInitials = "CA", u
           </div>
           <div>
             <h1 className="font-display text-xl font-extrabold tracking-tight text-slate-900 dark:text-white flex items-center gap-1.5">
-              PANGANIN
+              PANGANIFY
               <span className="text-[9px] bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 font-bold px-1.5 py-0.5 rounded-full border border-emerald-100 dark:border-emerald-900/50">
                 SMART FOOD
               </span>

@@ -1,4 +1,4 @@
-// Vercel Serverless Function: Panganin HACCP Image Analysis
+// Vercel Serverless Function: Panganify HACCP Image Analysis
 // Uses Gemini Vision API. Key read from SERVER-side env var (no VITE_ prefix).
 // The AI first VALIDATES that the photo matches the selected category
 // (dapur / bahan / kemasan), then performs a real HACCP analysis.

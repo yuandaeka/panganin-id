@@ -70,7 +70,7 @@ export default function NewsPortalScreen({ initialArticle, onBackToHome }) {
             <p className="text-[9px] text-slate-500 dark:text-slate-450 font-bold uppercase tracking-wider">
               {activeArticle 
                 ? activeArticle.author 
-                : (language === 'en' ? "Global Education & Panganin News" : "Edukasi Global & Berita Panganin")}
+                : (language === 'en' ? "Global Education & Panganify News" : "Edukasi Global & Berita Panganify")}
             </p>
           </div>
         </div>

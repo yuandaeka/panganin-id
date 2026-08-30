@@ -21,7 +21,7 @@ export default function WelcomeScreen({ onStart }) {
           />
         </div>
 
-        {/* Brand Logo Header (See Eat! / Panganin signature typography) */}
+        {/* Brand Logo Header (See Eat! / Panganify signature typography) */}
         <div className="absolute top-[10%] left-0 w-full flex justify-center z-10">
           <div className="text-center font-serif-welcome leading-none tracking-tight drop-shadow-sm">
             <h1 className="text-3xl font-black text-slate-900 dark:text-white flex items-baseline justify-center">

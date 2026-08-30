@@ -1,4 +1,4 @@
-// Vercel Serverless Function: Panganin AI Chatbot
+// Vercel Serverless Function: Panganify AI Chatbot
 // Reads API keys from SERVER-side env vars (no VITE_ prefix, never exposed to browser).
 // DeepSeek primary -> Gemini fallback -> offline rule reply.
 // Streams SSE back to the client.
@@ -7,7 +7,7 @@ export const config = {
   maxDuration: 60,
 };
 
-const SYSTEM_PROMPT = "Anda adalah Panganin AI Assistant, asisten pintar ahli gizi dan konsultan keamanan pangan (HACCP) untuk Program Makan Bergizi Gratis di Indonesia. Bantu jawab pertanyaan seputar gizi masakan massal, regulasi suhu sajian, pencegahan food-waste, harga bahan pangan petani lokal, dan bahaya wadah saji plastik/styrofoam. ATURAN FORMAT JAWABAN: 1) JANGAN gunakan simbol markdown seperti **, *, #, -, atau bullet points. 2) Tulis jawaban dalam bentuk paragraf dan kalimat yang rapi seperti chat assistant profesional. 3) Jika perlu membuat daftar, gunakan angka biasa (1, 2, 3) tanpa simbol apapun. 4) Berikan saran dan rekomendasi praktis di akhir jawaban. 5) Gunakan bahasa Indonesia yang ramah, sopan, dan mudah dipahami. 6) Jawab secara lengkap dan tuntas, jangan terpotong.";
+const SYSTEM_PROMPT = "Anda adalah Panganify AI Assistant, asisten pintar ahli gizi dan konsultan keamanan pangan (HACCP) untuk Program Makan Bergizi Gratis di Indonesia. Bantu jawab pertanyaan seputar gizi masakan massal, regulasi suhu sajian, pencegahan food-waste, harga bahan pangan petani lokal, dan bahaya wadah saji plastik/styrofoam. ATURAN FORMAT JAWABAN: 1) JANGAN gunakan simbol markdown seperti **, *, #, -, atau bullet points. 2) Tulis jawaban dalam bentuk paragraf dan kalimat yang rapi seperti chat assistant profesional. 3) Jika perlu membuat daftar, gunakan angka biasa (1, 2, 3) tanpa simbol apapun. 4) Berikan saran dan rekomendasi praktis di akhir jawaban. 5) Gunakan bahasa Indonesia yang ramah, sopan, dan mudah dipahami. 6) Jawab secara lengkap dan tuntas, jangan terpotong.";
 
 function offlineReply(text) {
   const q = text.toLowerCase();
@@ -18,10 +18,10 @@ function offlineReply(text) {
     return "Wadah non-foodgrade sangat berbahaya bagi kesehatan!\n\n* Plastik Kresek Hitam: Hasil daur ulang kotor. Panas memicu perpindahan logam berat & klorin.\n* Styrofoam: Mengandung zat residu karsinogenik (Benzena/Stirena). Sangat dilarang untuk kuah bersuhu >70°C.\n* Rekomendasi: Gunakan wadah plastik PP (Kode 5) atau kemasan serat tanaman (bagasse) biodegradable yang aman.";
   }
   if (q.includes('blockchain') || q.includes('tani') || q.includes('petani')) {
-    return "Sistem PANGANIN Blockchain mencatat data pasokan pangan langsung dari petani lokal tanpa perantara tengkulak. \n\nKeuntungannya: \n1. Transparansi Harga: Memastikan harga beli transparan di ledger digital guna mencegah korupsi atau manipulasi anggaran program gizi.\n2. Rantai Pasok Kilat: Menghubungkan logistik terdekat sehingga makanan lebih segar saat sampai ke dapur massal.";
+    return "Sistem PANGANIFY Blockchain mencatat data pasokan pangan langsung dari petani lokal tanpa perantara tengkulak. \n\nKeuntungannya: \n1. Transparansi Harga: Memastikan harga beli transparan di ledger digital guna mencegah korupsi atau manipulasi anggaran program gizi.\n2. Rantai Pasok Kilat: Menghubungkan logistik terdekat sehingga makanan lebih segar saat sampai ke dapur massal.";
   }
   if (q.includes('haccp')) {
-    return "Analisis HACCP (Hazard Analysis Critical Control Point) di Panganin melacak kebersihan dapur Anda. Anda bisa memoto meja produksi atau wadah penyajian, dan AI kami akan mengukur skor higienitas, potensi cemaran mikroba silang, serta memberikan checklist digital secara otomatis.";
+    return "Analisis HACCP (Hazard Analysis Critical Control Point) di Panganify melacak kebersihan dapur Anda. Anda bisa memoto meja produksi atau wadah penyajian, dan AI kami akan mengukur skor higienitas, potensi cemaran mikroba silang, serta memberikan checklist digital secara otomatis.";
   }
   return "Terima kasih atas pertanyaannya! Saya dapat memandu Anda untuk optimasi resep massal bergizi, mendeteksi bahaya wadah saji (styrofoam/kresek) dengan AI scanner, serta pencocokan petani lokal via blockchain. Silakan ketik pertanyaan yang lebih spesifik.";
 }

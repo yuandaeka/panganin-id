@@ -18,6 +18,11 @@ export default function HomeView({ onSwitchTab }) {
         </div>
       </div>
 
+      {/* Hero News & Education Carousel */}
+      <section className="relative z-0">
+        <EducationCarousel onSelectArticle={() => onSwitchTab('news')} onViewAll={() => onSwitchTab('news')} />
+      </section>
+
       {/* Global Search & Direct Query bar */}
       <div className="relative">
         <span className="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-slate-400">
@@ -30,9 +35,9 @@ export default function HomeView({ onSwitchTab }) {
         />
       </div>
 
-      {/* PANGANIN Core Features Quick Access Grid */}
+      {/* PANGANIFY Core Features Quick Access Grid */}
       <div>
-        <h3 class="text-xs font-extrabold text-slate-400 tracking-wider uppercase mb-3">Layanan Utama Panganin</h3>
+        <h3 class="text-xs font-extrabold text-slate-400 tracking-wider uppercase mb-3">Layanan Utama Panganify</h3>
         <div className="grid grid-cols-2 gap-3">
           {/* Nav Card 1: AI Portion Planner */}
           <button 
@@ -132,11 +137,6 @@ export default function HomeView({ onSwitchTab }) {
             <i className="fa-solid fa-camera"></i> Mulai Scan HACCP
           </button>
         </div>
-      </div>
-
-      {/* Global Nutrition News & Global Cooking Tips (Edukasi Global) - Bottom (Fix 1.1) */}
-      <div className="pt-2">
-        <EducationCarousel />
       </div>
     </section>
   );
