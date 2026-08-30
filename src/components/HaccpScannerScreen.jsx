@@ -430,6 +430,7 @@ export default function HaccpScannerScreen({ onBackToHome }) {
   const videoRef = useRef(null);
   const streamRef = useRef(null);
   const fileInputRef = useRef(null);
+  const mobileCameraInputRef = useRef(null);
 
   // Clean up streams on unmount
   useEffect(() => {
@@ -437,6 +438,16 @@ export default function HaccpScannerScreen({ onBackToHome }) {
       stopCameraStream();
     };
   }, []);
+
+  // Ensure stream is properly bound to video element whenever live streaming state changes
+  useEffect(() => {
+    if (isLiveStreaming && streamRef.current && videoRef.current) {
+      if (videoRef.current.srcObject !== streamRef.current) {
+        videoRef.current.srcObject = streamRef.current;
+        videoRef.current.play().catch(err => console.log("Camera playback start:", err));
+      }
+    }
+  }, [isLiveStreaming, isCameraActive]);
 
   // Reset scanner states whenever switching tabs
   useEffect(() => {
@@ -458,6 +469,9 @@ export default function HaccpScannerScreen({ onBackToHome }) {
       streamRef.current.getTracks().forEach(track => track.stop());
       streamRef.current = null;
     }
+    if (videoRef.current) {
+      videoRef.current.srcObject = null;
+    }
     setIsLiveStreaming(false);
   };
 
@@ -466,32 +480,55 @@ export default function HaccpScannerScreen({ onBackToHome }) {
       setIsScanning(true);
       stopCameraStream(); // Ensure any old streams are closed
 
-      const constraints = {
-        video: {
-          facingMode: frontMode ? "user" : "environment",
-          width: { ideal: 1280 },
-          height: { ideal: 720 }
-        },
-        audio: false
-      };
-
-      const stream = await navigator.mediaDevices.getUserMedia(constraints);
-      streamRef.current = stream;
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        throw new Error("API Kamera tidak didukung di browser ini. Gunakan fitur Ambil Foto.");
       }
+
+      let stream = null;
+      try {
+        // Attempt with facingMode preference
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: {
+            facingMode: frontMode ? "user" : { ideal: "environment" },
+            width: { ideal: 1280 },
+            height: { ideal: 720 }
+          },
+          audio: false
+        });
+      } catch (errConstraint) {
+        console.warn("Attempting basic video fallback constraint:", errConstraint);
+        // Fallback to basic video without facingMode constraint
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: true,
+          audio: false
+        });
+      }
+
+      streamRef.current = stream;
       setIsLiveStreaming(true);
       setIsCameraActive(true);
       setCapturedImage(null);
       setAttachedFile(null);
       setSelectedPreset(null);
       setCurrentData(null);
+      setAnalysisNotice(null);
+      setCameraToast(frontMode ? "Kamera Depan Aktif" : "Kamera Belakang Aktif");
+      setTimeout(() => setCameraToast(''), 2000);
     } catch (err) {
-      console.warn("Real camera hardware blocked or unavailable, enabling simulation camera viewfinder:", err);
+      console.warn("Camera access failed:", err);
       setIsLiveStreaming(false);
       setIsCameraActive(true);
-      setCameraToast("Kamera Fisik tidak terdeteksi. Mode Lensa Simulasi aktif.");
-      setTimeout(() => setCameraToast(''), 3000);
+      
+      let errMsg = "Kamera tidak dapat diakses.";
+      if (err.name === "NotAllowedError" || err.name === "PermissionDeniedError") {
+        errMsg = "Izin kamera ditolak. Silakan izinkan akses kamera di browser Anda.";
+      } else if (err.name === "NotFoundError" || err.name === "DevicesNotFoundError") {
+        errMsg = "Perangkat kamera fisik tidak ditemukan pada perangkat Anda.";
+      } else if (err.name === "NotReadableError" || err.name === "TrackStartError") {
+        errMsg = "Kamera sedang digunakan oleh aplikasi lain.";
+      }
+      setCameraToast(errMsg);
+      setTimeout(() => setCameraToast(''), 4000);
     } finally {
       setIsScanning(false);
     }
@@ -623,6 +660,12 @@ export default function HaccpScannerScreen({ onBackToHome }) {
     }
   };
 
+  const handleMobileCameraClick = () => {
+    if (mobileCameraInputRef.current) {
+      mobileCameraInputRef.current.click();
+    }
+  };
+
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -704,12 +747,22 @@ export default function HaccpScannerScreen({ onBackToHome }) {
 
   return (
     <section id="screen-haccp" className="p-4 space-y-5 animate-[fadeIn_0.3s_ease-out]">
-      {/* Hidden File Input */}
+      {/* Hidden File Input for Gallery / Local Drive */}
       <input 
         type="file" 
         ref={fileInputRef} 
         onChange={handleFileUpload} 
         accept="image/*" 
+        className="hidden" 
+      />
+
+      {/* Hidden File Input for Native Mobile Camera */}
+      <input 
+        type="file" 
+        ref={mobileCameraInputRef} 
+        onChange={handleFileUpload} 
+        accept="image/*" 
+        capture="environment"
         className="hidden" 
       />
 
@@ -778,15 +831,15 @@ export default function HaccpScannerScreen({ onBackToHome }) {
             <div className="absolute inset-0 bg-slate-950/85 backdrop-blur-xs flex flex-col items-center justify-center z-30 text-white space-y-3">
               <div className="w-10 h-10 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
               <p className="text-xs font-bold tracking-wider text-emerald-400 uppercase animate-pulse">
-                {activeTab === 'dapur' && 'Analyzing Kitchen Layout...'}
-                {activeTab === 'bahan' && 'Detecting Critical Hazard Points...'}
-                {activeTab === 'kemasan' && 'Testing Chemical Leaching Risk...'}
+                {activeTab === 'dapur' && 'Menganalisis Tata Letak & Kebersihan Dapur...'}
+                {activeTab === 'bahan' && 'Mendeteksi Titik Kritis Bahaya Cemaran...'}
+                {activeTab === 'kemasan' && 'Menguji Residu Kimia Wadah Pangan...'}
               </p>
             </div>
           )}
 
           {cameraToast && (
-            <div className="absolute top-4 bg-black/80 backdrop-blur-md text-white text-[10px] font-bold px-3 py-1.5 rounded-full z-30 border border-white/5 shadow-md">
+            <div className="absolute top-4 bg-black/80 backdrop-blur-md text-white text-[10px] font-bold px-3 py-1.5 rounded-full z-30 border border-white/5 shadow-md animate-[fadeIn_0.2s_ease-out]">
               <i className="fa-solid fa-circle-info mr-1 text-emerald-400"></i> {cameraToast}
             </div>
           )}
@@ -794,12 +847,21 @@ export default function HaccpScannerScreen({ onBackToHome }) {
           {isCameraActive ? (
             /* ACTIVE CAMERA VIEWFINDER */
             <>
-              {isLiveStreaming && videoRef.current ? (
+              {isLiveStreaming ? (
                 <video 
-                  ref={videoRef}
+                  ref={(el) => {
+                    videoRef.current = el;
+                    if (el && streamRef.current && el.srcObject !== streamRef.current) {
+                      el.srcObject = streamRef.current;
+                      el.play().catch((err) => console.log("Video auto play error:", err));
+                    }
+                  }}
                   playsInline
                   autoPlay
                   muted
+                  onLoadedMetadata={(e) => {
+                    e.target.play().catch(() => {});
+                  }}
                   className={`w-full h-full object-cover ${isFrontCamera ? 'scale-x-[-1]' : ''}`}
                 />
               ) : (
@@ -851,23 +913,23 @@ export default function HaccpScannerScreen({ onBackToHome }) {
                 <button 
                   onClick={handleFlipCamera}
                   className="w-10 h-10 bg-white/10 hover:bg-white/20 text-white rounded-full flex items-center justify-center transition-all cursor-pointer active:scale-90"
-                  title="Balik Kamera"
+                  title="Balik Kamera (Depan / Belakang)"
                 >
                   <i className="fa-solid fa-camera-rotate text-sm"></i>
                 </button>
                 
                 <button 
                   onClick={handleTriggerShutter}
-                  className="w-11 h-11 bg-red-600 hover:bg-red-500 text-white rounded-full flex items-center justify-center transition-all border-4 border-white cursor-pointer active:scale-90 shadow-md"
-                  title="Ambil Foto"
+                  className="w-12 h-12 bg-red-600 hover:bg-red-500 text-white rounded-full flex items-center justify-center transition-all border-4 border-white cursor-pointer active:scale-90 shadow-md"
+                  title="Ambil Foto & Analisis"
                 >
-                  <i className="fa-solid fa-camera text-xs"></i>
+                  <i className="fa-solid fa-camera text-sm"></i>
                 </button>
                 
                 <button 
                   onClick={handleToggleCamera}
                   className="w-10 h-10 bg-white/10 hover:bg-white/20 text-white rounded-full flex items-center justify-center transition-all cursor-pointer active:scale-90"
-                  title="Matikan Kamera"
+                  title="Tutup Kamera"
                 >
                   <i className="fa-solid fa-video-slash text-sm"></i>
                 </button>
@@ -908,34 +970,41 @@ export default function HaccpScannerScreen({ onBackToHome }) {
           ) : (
             /* BLANK / OFFLINE VIEW */
             <div className="text-center p-6 text-slate-400 space-y-4 z-10">
-              <div className="w-14 h-14 bg-slate-800 text-slate-400 border border-slate-700 rounded-full flex items-center justify-center mx-auto shadow-md">
-                <i className="fa-solid fa-circle-notch text-2xl animate-[spin_10s_linear_infinite]"></i>
+              <div className="w-14 h-14 bg-slate-800 text-emerald-400 border border-slate-700 rounded-full flex items-center justify-center mx-auto shadow-md">
+                <i className="fa-solid fa-camera text-2xl"></i>
               </div>
               <div>
                 <p className="text-xs font-extrabold text-white">
-                  {activeTab === 'dapur' && 'Audit Lensa Dapur Offline'}
-                  {activeTab === 'bahan' && 'Kamera Deteksi Bahan Baku Offline'}
-                  {activeTab === 'kemasan' && 'Kamera Analisis Kemasan Offline'}
+                  {activeTab === 'dapur' && 'Scan Kamera Kebersihan Dapur'}
+                  {activeTab === 'bahan' && 'Scan Titik Kritis Bahan Baku'}
+                  {activeTab === 'kemasan' && 'Scan Keamanan Wadah & Kemasan'}
                 </p>
                 <p className="text-[10px] text-slate-400 mt-1.5 max-w-[280px] mx-auto leading-relaxed">
-                  {activeTab === 'dapur' && 'Ambil foto dapur Anda secara realtime untuk memindai status tata letak dan sanitasi, atau unggah berkas dari galeri.'}
-                  {activeTab === 'bahan' && 'Ambil foto bahan pangan atau unggah file untuk mendeteksi kontaminasi fisik, kimia, & biologi secara instant.'}
-                  {activeTab === 'kemasan' && 'Pindai bahan pembungkus makanan untuk meneliti potensi paparan timbal/plastik beracun bagi pangan bergizi.'}
+                  {activeTab === 'dapur' && 'Aktifkan kamera live untuk memindai tata letak dapur & sanitasi meja saji, atau ambil foto dengan kamera HP.'}
+                  {activeTab === 'bahan' && 'Aktifkan kamera live untuk mendeteksi bahaya kontaminasi mikrobiologi, kimia, dan fisik secara otomatis.'}
+                  {activeTab === 'kemasan' && 'Aktifkan kamera untuk menguji keamanan wadah plastik atau styrofoam terhadap paparan suhu makanan panas.'}
                 </p>
               </div>
               
-              <div className="flex gap-2 justify-center max-w-xs mx-auto">
+              <div className="flex flex-wrap gap-2 justify-center max-w-sm mx-auto">
                 <button 
                   onClick={handleToggleCamera} 
-                  className="flex-1 bg-emerald-650 hover:bg-emerald-600 text-white text-[10px] font-bold py-2.5 px-3 rounded-xl transition-all-300 cursor-pointer shadow-sm flex items-center justify-center gap-1.5"
+                  className="flex-1 min-w-[130px] bg-emerald-650 hover:bg-emerald-600 text-white text-[11px] font-bold py-2.5 px-3 rounded-xl transition-all-300 cursor-pointer shadow-sm flex items-center justify-center gap-1.5 active:scale-95"
                 >
-                  <i className="fa-solid fa-camera"></i> Ambil Foto
+                  <i className="fa-solid fa-video"></i> Buka Kamera
+                </button>
+                <button 
+                  onClick={handleMobileCameraClick} 
+                  className="flex-1 min-w-[120px] bg-emerald-800 hover:bg-emerald-700 text-emerald-100 border border-emerald-700 text-[11px] font-bold py-2.5 px-3 rounded-xl transition-all-300 cursor-pointer flex items-center justify-center gap-1.5 active:scale-95"
+                  title="Buka Aplikasi Kamera Ponsel Langsung"
+                >
+                  <i className="fa-solid fa-camera"></i> Foto HP
                 </button>
                 <button 
                   onClick={handleAttachFileClick} 
-                  className="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-[10px] font-bold py-2.5 px-3 rounded-xl transition-all-300 cursor-pointer flex items-center justify-center gap-1.5"
+                  className="w-full sm:w-auto bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-[11px] font-bold py-2.5 px-4 rounded-xl transition-all-300 cursor-pointer flex items-center justify-center gap-1.5 active:scale-95"
                 >
-                  <i className="fa-solid fa-paperclip"></i> Pilih Foto
+                  <i className="fa-solid fa-image"></i> Galeri
                 </button>
               </div>
             </div>
