@@ -116,7 +116,13 @@ export default function App() {
         ) : activePage !== 'chatbot' ? (
           <div className="flex-1 overflow-y-auto relative pb-28 pt-1">
             {activePage === 'home' && (
-              <HomeScreen onSwitchTab={setActivePage} onSelectArticle={setSelectedArticle} profileName={profile.name} />
+              <HomeScreen 
+                onSwitchTab={setActivePage} 
+                onSelectArticle={setSelectedArticle} 
+                profile={profile}
+                setProfile={setProfile}
+                triggerNotification={triggerNotification}
+              />
             )}
 
             {activePage === 'news' && (

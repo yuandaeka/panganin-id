@@ -6,9 +6,11 @@ export default function TopHeader({ onNotificationToggle, userInitials = "CA", u
     <header className="sticky top-3 z-40 bg-white/85 backdrop-blur-xl border border-slate-100/80 rounded-2xl mx-4 mt-3.5 mb-1.5 card-shadow dark:bg-slate-850 dark:border-slate-800 transition-all-300 shrink-0">
       <div className="px-4 py-3 flex items-center justify-between">
         <div className="flex items-center gap-2.5">
-          <div className="w-10 h-10 bg-gradient-to-br from-emerald-600 to-emerald-800 rounded-2xl flex items-center justify-center shadow-md shadow-emerald-700/20 dark:shadow-none">
-            <i className="fa-solid fa-leaf text-white text-lg"></i>
-          </div>
+          <img 
+            src="/panganify.png" 
+            alt="PANGANIFY" 
+            className="w-11 h-11 object-contain drop-shadow-sm shrink-0" 
+          />
           <div>
             <h1 className="font-display text-xl font-extrabold tracking-tight text-slate-900 dark:text-white flex items-center gap-1.5">
               PANGANIFY

@@ -15,7 +15,6 @@ const SUGGESTIONS = [
   }
 ];
 
-// Parse an SSE (Server-Sent Events) stream and call onChunk for each data payload.
 const streamSse = async (response, onChunk) => {
   if (!response.ok) {
     let message = `HTTP ${response.status}`;
@@ -27,6 +26,12 @@ const streamSse = async (response, onChunk) => {
     }
     throw new Error(message);
   }
+
+  const contentType = response.headers.get('content-type') || '';
+  if (!contentType.includes('text/event-stream')) {
+    throw new Error('API server tidak mengembalikan stream SSE (mungkin hosting mengembalikan index.html).');
+  }
+
   if (!response.body) {
     throw new Error('Streaming tidak didukung oleh browser ini.');
   }
@@ -141,14 +146,21 @@ export default function AiChatbotScreen({ onClose }) {
         body: JSON.stringify({ text })
       });
 
+      let receivedAnyChunk = false;
       await streamSse(response, (json) => {
         if (json.chunk) {
+          receivedAnyChunk = true;
           updateStreaming(json.chunk);
         }
       });
+
+      if (!receivedAnyChunk) {
+        throw new Error('Tidak ada respon teks yang diterima');
+      }
+
       markDone();
     } catch (err) {
-      console.error("Chat API failed:", err);
+      console.error("Chat API failed, switching to offline fallback:", err);
       // Last resort: offline rule-based reply
       handleOfflineReply(text, loadingId);
     }
@@ -184,8 +196,8 @@ export default function AiChatbotScreen({ onClose }) {
       {/* Full-Screen Header panel */}
       <div className="bg-gradient-to-r from-emerald-800 to-emerald-950 text-white px-4 py-4 flex items-center justify-between shrink-0 shadow-md">
         <div className="flex items-center gap-2.5">
-          <div className="w-9 h-9 bg-emerald-700 rounded-full flex items-center justify-center border border-emerald-600 shadow-sm shrink-0">
-            <i className="fa-solid fa-robot"></i>
+          <div className="w-9 h-9 bg-white dark:bg-slate-800 rounded-full flex items-center justify-center p-1 border border-emerald-600/50 shadow-sm shrink-0 overflow-hidden">
+            <img src="/panganify.png" alt="Panganify AI" className="w-full h-full object-contain" />
           </div>
           <div>
             <h3 className="font-display text-sm font-extrabold">Panganify AI Assistant</h3>
@@ -214,8 +226,8 @@ export default function AiChatbotScreen({ onClose }) {
             }`}
           >
             {msg.sender === 'ai' && (
-              <div className="w-7 h-7 bg-emerald-100 text-emerald-800 rounded-full flex items-center justify-center text-[9px] p-1.5 font-black shrink-0 border border-emerald-200 shadow-3xs">
-                AI
+              <div className="w-7 h-7 bg-white text-emerald-800 rounded-full flex items-center justify-center p-0.5 shrink-0 border border-emerald-200 shadow-3xs overflow-hidden">
+                <img src="/panganify.png" alt="AI" className="w-full h-full object-contain" />
               </div>
             )}
             <div 

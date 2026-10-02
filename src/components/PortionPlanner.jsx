@@ -147,7 +147,7 @@ export default function PortionPlanner({ onBackToHome, onConnectFarmers }) {
         </div>
 
         {/* Portion Slider - Task 3.2 */}
-        <div className="space-y-2">
+        <div className="space-y-2.5">
           <div className="flex justify-between items-center">
             <label className="text-xs font-extrabold text-slate-500 uppercase tracking-wider block">2. Tentukan Jumlah Porsi</label>
             <span id="portion-value-display" className="text-sm font-black text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100">
@@ -157,17 +157,35 @@ export default function PortionPlanner({ onBackToHome, onConnectFarmers }) {
           <input 
             type="range" 
             id="portion-range" 
-            min="10" 
+            min="1" 
             max="2000" 
             value={portionCount} 
-            step="10" 
-            onChange={(e) => setPortionCount(parseInt(e.target.value))}
+            step="1" 
+            onChange={(e) => setPortionCount(Math.max(1, parseInt(e.target.value) || 1))}
             className="w-full h-2 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-emerald-600"
           />
           <div className="flex justify-between text-[10px] text-slate-400 font-bold">
-            <span>10 Porsi</span>
+            <span>1 Porsi</span>
             <span>1,000 Porsi</span>
             <span>2,000 Porsi</span>
+          </div>
+
+          {/* Quick preset buttons */}
+          <div className="flex flex-wrap gap-1.5 pt-1">
+            {[1, 10, 50, 200, 500, 1000].map((p) => (
+              <button
+                key={p}
+                type="button"
+                onClick={() => setPortionCount(p)}
+                className={`px-2 py-0.5 rounded-lg text-[10px] font-bold transition-all cursor-pointer ${
+                  portionCount === p 
+                    ? 'bg-emerald-600 text-white shadow-xs' 
+                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                }`}
+              >
+                {p} {p === 1 ? 'Porsi' : 'Porsi'}
+              </button>
+            ))}
           </div>
         </div>
 
@@ -228,7 +246,10 @@ export default function PortionPlanner({ onBackToHome, onConnectFarmers }) {
                   <span className="font-bold text-slate-800">{ing.name}</span>
                 </div>
                 <span className="font-extrabold text-slate-550 bg-white border border-slate-100 px-2 py-1 rounded-xl shadow-3xs">
-                  {ing.weight.toLocaleString(undefined, {maximumFractionDigits: 1})} {ing.unit}
+                  {ing.weight < 1 && ing.unit !== 'Pcs'
+                    ? ing.weight.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 3 })
+                    : ing.weight.toLocaleString(undefined, { maximumFractionDigits: 1 })
+                  } {ing.unit}
                 </span>
               </div>
             ))}

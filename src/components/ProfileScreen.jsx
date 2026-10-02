@@ -408,6 +408,17 @@ export default function ProfileScreen({ onBackToHome, profile, setProfile, darkM
           </div>
         </div>
       </div>
+
+      {/* App Version & Brand Footer */}
+      <div className="flex flex-col items-center justify-center pt-2 pb-4 text-center space-y-1.5 opacity-80">
+        <div className="w-9 h-9 rounded-2xl bg-white dark:bg-slate-800 p-1 border border-slate-200/80 dark:border-slate-700 shadow-2xs flex items-center justify-center">
+          <img src="/panganify.png" alt="Panganify" className="w-full h-full object-contain" />
+        </div>
+        <div>
+          <p className="text-[11px] font-extrabold text-slate-700 dark:text-slate-300 tracking-tight">PANGANIFY <span className="text-[9px] font-mono bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 px-1.5 py-0.5 rounded-full">v2.4</span></p>
+          <p className="text-[9px] text-slate-400 dark:text-slate-500 mt-0.5">Ekosistem Pangan Sosial Berbasis AI & Blockchain</p>
+        </div>
+      </div>
     </section>
   );
 }

@@ -6,8 +6,8 @@ export default function WelcomeScreen({ onStart }) {
 
   return (
     <div className="relative w-full h-full bg-[#fdfdfc] dark:bg-slate-900 overflow-hidden flex flex-col justify-between animate-[fadeIn_0.4s_ease-out]">
-      {/* Top section with Hero Image and Logo */}
-      <div className="relative h-[55%] w-full">
+      {/* Top section with Hero Image */}
+      <div className="relative h-[48%] sm:h-[50%] w-full">
         {/* Hero Image with bottom fade mask */}
         <div className="absolute inset-0 w-full h-full overflow-hidden">
           <img
@@ -20,29 +20,26 @@ export default function WelcomeScreen({ onStart }) {
             }}
           />
         </div>
-
-        {/* Brand Logo Header (See Eat! / Panganify signature typography) */}
-        <div className="absolute top-[10%] left-0 w-full flex justify-center z-10">
-          <div className="text-center font-serif-welcome leading-none tracking-tight drop-shadow-sm">
-            <h1 className="text-3xl font-black text-slate-900 dark:text-white flex items-baseline justify-center">
-              See<span className="text-brand-green text-lg align-top ml-0.5 font-bold">••</span>
-            </h1>
-            <h1 className="text-3xl font-black text-slate-900 dark:text-white -mt-1 ml-6">
-              Eat!
-            </h1>
-          </div>
-        </div>
       </div>
 
       {/* Bottom section with Text Headline & Action CTA */}
-      <div className="flex-1 flex flex-col justify-end px-8 pb-10 z-10 relative bg-gradient-to-t from-[#fcfcfa] via-[#fcfcfa] to-transparent dark:from-slate-900 dark:via-slate-900 dark:to-transparent pt-8">
-        {/* Headline Text */}
+      <div className="flex-1 flex flex-col justify-end px-8 pb-10 z-10 relative bg-gradient-to-t from-[#fcfcfa] via-[#fcfcfa] to-transparent dark:from-slate-900 dark:via-slate-900 dark:to-transparent pt-4">
+        {/* Logo & Headline Text */}
         <div className="text-center mb-8 relative">
-          <h2 className="font-serif-welcome text-[36px] sm:text-[40px] leading-[1.1] font-extrabold text-slate-900 dark:text-white tracking-tight">
-            {t('welcomeHeadlineMain')} <br />
-            <span className="text-brand-green italic font-medium">{t('welcomeHeadlineGreen')}</span> {t('welcomeHeadlineMid')} <br />
-            {t('welcomeHeadlineBrown').split(' ')[0]}{' '}
-            <span className="text-brand-brown">{t('welcomeHeadlineBrown').split(' ').slice(1).join(' ') || 'Food'}</span>
+          {/* Logo P Standalone replacing Discovery text */}
+          <div className="flex justify-center mb-3">
+            <img 
+              src="/panganify.png" 
+              alt="Panganify" 
+              className="w-16 h-16 sm:w-20 sm:h-20 object-contain drop-shadow-md hover:scale-105 transition-transform duration-300" 
+            />
+          </div>
+
+          <h2 className="font-serif-welcome text-[27px] sm:text-[32px] leading-[1.25] font-extrabold text-slate-900 dark:text-white tracking-tight">
+            {t('welcomeHeadlinePart1')}{' '}
+            <span className="text-brand-green italic font-medium">{t('welcomeHeadlinePart2')}</span>{' '}
+            {t('welcomeHeadlinePart3')} <br />
+            <span className="text-brand-brown">{t('welcomeHeadlinePart4')}</span>
           </h2>
 
           {/* Decorative scribble underline vector */}

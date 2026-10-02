@@ -7,10 +7,10 @@ export const translations = {
     navLedger: "Ledger BC",
     
     // Welcome Screen
-    welcomeHeadlineMain: "Discovering",
-    welcomeHeadlineGreen: "Fresh,",
-    welcomeHeadlineMid: "Local,",
-    welcomeHeadlineBrown: "Organic Food",
+    welcomeHeadlinePart1: "Smart",
+    welcomeHeadlinePart2: "Safe",
+    welcomeHeadlinePart3: "and Sustainable",
+    welcomeHeadlinePart4: "Food Management",
     welcomeSignInBtn: "Sign in",
     welcomeNoAccount: "Don't have an account?",
     welcomeSignUpNow: "sign up now",
@@ -116,10 +116,10 @@ export const translations = {
     navLedger: "Ledger BC",
     
     // Welcome Screen
-    welcomeHeadlineMain: "Discovering",
-    welcomeHeadlineGreen: "Fresh,",
-    welcomeHeadlineMid: "Local,",
-    welcomeHeadlineBrown: "Organic Food",
+    welcomeHeadlinePart1: "Smart",
+    welcomeHeadlinePart2: "Safe",
+    welcomeHeadlinePart3: "and Sustainable",
+    welcomeHeadlinePart4: "Food Management",
     welcomeSignInBtn: "Sign in",
     welcomeNoAccount: "Don't have an account?",
     welcomeSignUpNow: "sign up now",

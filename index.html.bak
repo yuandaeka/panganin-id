@@ -288,9 +288,9 @@
                         <label class="text-xs font-extrabold text-slate-500 uppercase tracking-wider block">2. Tentukan Jumlah Porsi</label>
                         <span id="portion-value-display" class="text-sm font-black text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100">500 Porsi</span>
                     </div>
-                    <input type="range" id="portion-range" min="10" max="2000" value="500" step="10" oninput="updatePortionSlider(this.value)" class="w-full h-2 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-emerald-600">
+                    <input type="range" id="portion-range" min="1" max="2000" value="500" step="1" oninput="updatePortionSlider(this.value)" class="w-full h-2 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-emerald-600">
                     <div class="flex justify-between text-[10px] text-slate-400 font-bold">
-                        <span>10 Porsi</span>
+                        <span>1 Porsi</span>
                         <span>1,000 Porsi</span>
                         <span>2,000 Porsi</span>
                     </div>
